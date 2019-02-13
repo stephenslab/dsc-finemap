@@ -59,7 +59,7 @@ sim_gaussian: simulate.R + \
   n_signal: 1, 3, 5, 10
   effect_weight: rep(1/n_signal, n_signal), c(rep(0.15/(n_signal-1), n_signal-1), 0.85)
   $Y: res$Y
-  $N: nrow(res$X)
+  $N: nrow(X)
   $meta: res$meta
 
 sim_gaussian_null(sim_gaussian):
