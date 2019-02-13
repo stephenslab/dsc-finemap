@@ -7,7 +7,7 @@
 
 DSC:
   define:
-    data: tiny_data
+    data: full_data
     simulate: sim_gaussian_null, sim_gaussian
     susie_oracle: init_oracle * susie_z_init
   run:
@@ -16,3 +16,5 @@ DSC:
   exec_path: code
   global:
     data_file: data/X_random.txt
+  output: output/susie_z_full_data
+
