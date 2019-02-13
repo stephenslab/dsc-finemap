@@ -15,4 +15,4 @@ DSC:
     susie: data * simulate * get_sumstats * ((susie_z, susie, susie_oracle) * (score_susie, plot_susie))
   exec_path: code
   global:
-    data_file: data/yuxin-toy.txt
+    data_file: data/X_random.txt
