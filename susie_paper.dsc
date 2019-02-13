@@ -11,7 +11,7 @@ DSC:
   run:
     default: data * summarize_ld * lm_pve02 * get_sumstats * (susie * (score_susie, plot_susie), dap * plot_dap, caviar, finemap)
     susie: liter_data * simple_lm * susie * (score_susie, plot_susie)
-    susie_v: liter_data * simple_lm * (susie_uniroot, susie_em) * (score_susie, plot_susie)
+    susie_v: liter_data * simple_lm * (susie_uniroot, susie_em, susie_optim) * (score_susie, plot_susie)
   exec_path: code
   global:
     data_file: data/gtex-manifest.txt
