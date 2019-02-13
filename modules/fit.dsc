@@ -82,11 +82,12 @@ init_oracle: initialize.R + R(s_init=init_susie($(meta)$true_coef))
 
 susie_z: susie_z.R + \
               R(res = susie_z_multiple(sumstats$bhat/sumstats$shat,
-                $(ld_file), L, s_init, estimate_residual_variance))
+                $(ld_file), L, s_init, optimV_method, estimate_residual_variance))
   @CONF: R_libs = (susieR, data.table)
   sumstats: $sumstats
   s_init: NA
   L: 5, 10
+  optimV_method: "EM"
   estimate_residual_variance: TRUE
   $fitted: res$fitted
   $posterior: res$posterior
@@ -97,6 +98,20 @@ susie_z_large(susie_z):
 susie_z_init(susie_z):
   s_init: $s_init
   L: 10
+
+#------------------------------
+# Est V method comparison
+#------------------------------
+
+susie_z_uniroot(susie_z):
+  optimV_method: "uniroot"
+
+susie_z_em(susie_z):
+  optimV_method: "EM"
+
+susie_z_optim(susie_z):
+  optimV_method: "optim"
+
 
 #------------------------------
 # Kaiqian's V method comparison
