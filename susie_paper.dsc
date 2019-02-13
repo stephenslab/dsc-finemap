@@ -9,8 +9,8 @@ DSC:
   define:
     data: liter_data, full_data
   run:
-    default: data * summarize_ld * lm_pve02 * get_sumstats * (fit_susie * (score_susie, plot_susie), fit_dap * plot_dap, fit_caviar, fit_finemap)
-    susie: liter_data * simple_lm * fit_susie * (score_susie, plot_susie)
+    default: data * summarize_ld * lm_pve02 * get_sumstats * (susie * (score_susie, plot_susie), dap * plot_dap, caviar, finemap)
+    susie: liter_data * simple_lm * susie * (score_susie, plot_susie)
   exec_path: code
   global:
     data_file: data/gtex-manifest.txt

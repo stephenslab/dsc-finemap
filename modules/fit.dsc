@@ -30,7 +30,7 @@ finemap(caviar): fit_finemap.R + \
   args: "--n-causal-max 1", "--n-causal-max 2", "--n-causal-max 3"
   cache: file(FM)
 
-dap: fit_dap.py + Python(posterior = dap_batch(data['X'], data['Y'], cache, args))
+dap: fit_dap.py + Python(posterior = dap_batch(X, Y, cache, args))
   X: $X
   Y: $Y 
   args: "-ld_control 0.20 --all"
