@@ -2,7 +2,7 @@
 
 # Module input
 # ============
-# $data: full data; or
+# $X, $Y: full data; or
 # $sumstats: summary statistics; or / and
 # $ld: LD information
 
@@ -27,12 +27,12 @@ finemap(caviar): fit_finemap.R + \
                                         args, prefix=cache))
   N: $N
   k: NULL
-  data: $data
   args: "--n-causal-max 1", "--n-causal-max 2", "--n-causal-max 3"
   cache: file(FM)
 
 dap: fit_dap.py + Python(posterior = dap_batch(data['X'], data['Y'], cache, args))
-  data: $data
+  X: $X
+  Y: $Y 
   args: "-ld_control 0.20 --all"
   cache: file(DAP)
   $posterior: posterior
@@ -52,13 +52,15 @@ susie: fit_susie.R
   maxL: 10
   null_weight: 0, 0.5, 0.9, 0.95
   prior_var: 0, 0.1, 0.4
-  data: $data
+  X: $X
+  Y: $Y
   $posterior: posterior
   $fitted: fitted
 
 susie_auto: fit_susie.R
   @CONF: R_libs = susieR
-  data: $data
+  X: $X
+  Y: $Y
   prior_var: "auto"
   $posterior: posterior
   $fitted: fitted
@@ -74,7 +76,7 @@ susie10(susie):
 # SuSiE with summary statistics
 #------------------------------
 
-init_oracle: initialize.R + R(s_init=init_susie($(data)$true_coef))
+init_oracle: initialize.R + R(s_init=init_susie($(meta)$true_coef))
   @CONF: R_libs = susieR
   $s_init: s_init
 

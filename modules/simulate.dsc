@@ -12,9 +12,10 @@
 
 base_sim: lib_regression_simulator.py + \
                 regression_simulator.py + \
-                Python(data = simulate_main(data, conf, conf['cache']))
+                Python(res = simulate_main(dict(X=X,Y=Y), conf, conf['cache']))
   @CONF: python_modules = (seaborn, matplotlib, pprint)
-  data: $data
+  X: $X
+  Y: $Y
   top_idx: $top_idx
   n_signal: 3
   n_traits: 2
@@ -27,10 +28,11 @@ base_sim: lib_regression_simulator.py + \
   center_data: True
   cache: file(sim)
   tag: "sim1"
-  @ALIAS: conf = Dict(!data, !eff_mode)
-  $data: data
-  $V: data['V']
-  $N: data['Y'].shape[0]
+  @ALIAS: conf = Dict(!X, !Y, !eff_mode)
+  $Y: res['Y']
+  $N: res['Y'].shape[0]
+  $V: res['V']
+  $meta: dict(true_coef=res['true_coef'], residual_variance=res['residual_variance'])
 
 simple_lm(base_sim):
   n_signal: 1, 2, 3, 4, 5
@@ -50,14 +52,15 @@ original_Y(base_sim):
 #----------------------------------------
 
 sim_gaussian: simulate.R + \
-                R(res=sim_gaussian_multiple(data, pve, n_signal, effect_weight))
+                R(res=sim_gaussian_multiple(X, pve, n_signal, effect_weight))
   @CONF: R_libs = susieR
-  data: $data
+  X: $X
   pve: 0.01, 0.2, 0.6, 0.8
   n_signal: 1, 3, 5, 10
   effect_weight: rep(1/n_signal, n_signal), c(rep(0.15/(n_signal-1), n_signal-1), 0.85)
-  $data: res
+  $Y: res$Y
   $N: nrow(res$X)
+  $meta: res$meta
 
 sim_gaussian_null(sim_gaussian):
   pve: 0

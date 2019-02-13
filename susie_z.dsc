@@ -7,7 +7,7 @@
 
 DSC:
   define:
-    data: full_data
+    data: random_data
     simulate: sim_gaussian_null, sim_gaussian
     susie_oracle: init_oracle * susie_z_init
   run:

@@ -45,17 +45,16 @@ sim_gaussian = function(X.cs, pve, effect_num, effect_weight){
 }
 
 # A wrapper for simulating multiple Y's
-sim_gaussian_multiple = function(data, pve, effect_num, effect_weight, n_traits=1) {
-  X = as.matrix(data$X)
-  dat = list(X = susieR:::set_X_attributes(X, center=TRUE, scale = TRUE))
-  dat$sigma_std = vector()
+sim_gaussian_multiple = function(X, pve, effect_num, effect_weight, n_traits=1) {
+  meta = list(residual_variance = vector())
+  Y = NULL
   for (r in 1:n_traits) {
-    res = sim_gaussian(dat$X, pve, effect_num, effect_weight)
-    if (is.null(dat$Y)) dat$Y = as.matrix(res$Y)
-    else dat$Y = cbind(dat$Y, as.matrix(res$Y))
-    if (is.null(dat$true_coef)) dat$true_coef = as.matrix(res$beta)
-    else dat$true_coef = cbind(dat$true_coef, as.matrix(res$beta))
-    dat$sigma_std[r] = res$sigma_std
+    res = sim_gaussian(X, pve, effect_num, effect_weight)
+    if (is.null(Y)) Y = as.matrix(res$Y)
+    else Y = cbind(Y, as.matrix(res$Y))
+    if (is.null(meta$true_coef)) meta$true_coef = as.matrix(res$beta)
+    else meta$true_coef = cbind(meta$true_coef, as.matrix(res$beta))
+    meta$residual_variance[r] = res$sigma_std
   }
-  return(dat)
+  return(list(Y=Y, meta=meta))
 }

@@ -21,11 +21,11 @@ plot_dap(plot_finemap): plot_dap.R
 
 plot_susie: plot_susie.R
   @CONF: R_libs = susieR
-  data: $data
+  meta: $meta
   result: $fitted
   $plot_file: file(png)
 
-score_susie: susie_scores.R + R(sc = susie_scores_multiple($(fitted), $(data)$true_coef))
+score_susie: susie_scores.R + R(sc = susie_scores_multiple($(fitted), $(meta)$true_coef))
     $total: sc$total
     $valid: sc$valid
     $size: median(sc$size)

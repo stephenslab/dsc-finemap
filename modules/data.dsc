@@ -7,13 +7,14 @@
 # $sumstats: summary statistics
 
 full_data: sim_utils.R + R(data =readRDS(dataset);
-            data$X = as.matrix(data$X[,get_center(subset, ncol(data$X))]);
-            r = round(cor(data$X), 4);
+            X = center_scale(data$X[,get_center(subset, ncol(data$X))]);
+            r = round(cor(X), 4);
             write.table(r,ld_file,quote=F,col.names=F,row.names=F))
   tag: "full"
   dataset: Shell{head -150 ${data_file}}
   subset: NULL
-  $data: data
+  $X: X
+  $Y: data$Y
   $top_idx: NA
   $ld_file: file(ld)
         
@@ -29,16 +30,30 @@ tiny_data(full_data):
   tag: "300"
   subset: 300
 
-get_sumstats: regression.R + R(res = mm_regression(as.matrix(data$X), 
-                                                   as.matrix(data$Y), data$Z))
+random_data: sim_utils.R + R(set.seed(seed);
+              X = center_scale(matrix(rnorm(n*p), n, p));
+              r = round(cor(X), 4);
+              write.table(r,ld_file,quote=F,col.names=F,row.names=F))
+  @CONF: R_libs = susieR
+  tag: "random"
+  n: 1200
+  p: 1000
+  seed: -9
+  $top_idx: NA
+  $X: X
+  $Y: matrix(0,n,1)
+  $ld_file: file(ld)
+
+get_sumstats: regression.R + R(res = mm_regression(as.matrix(X), as.matrix(Y)))
   @CONF: R_libs = abind
-  data: $data
+  X: $X
+  Y: $Y
   $sumstats: res
                                                    
 summarize_ld: lib_regression_simulator.py + \
                 regression_simulator.py + \
-                Python(res = summarize_LD(data['X'], ld_file, ld_plot))
-  data: $data
+                Python(res = summarize_LD(X, ld_file, ld_plot))
+  X: $X
   ld_file: $ld_file
   $ld_plot: file(png)
   $top_idx: res

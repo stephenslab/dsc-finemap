@@ -10,3 +10,5 @@ get_center <- function(k,n) {
   if (end>n) end = n
   return(start:end)
 }
+
+center_scale <- function(X) return(susieR:::set_X_attributes(as.matrix(X), center=TRUE, scale = TRUE))
