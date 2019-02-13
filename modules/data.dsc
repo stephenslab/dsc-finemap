@@ -27,6 +27,10 @@ liter_data(full_data):
   tag: "1k"
   subset: 1000
 
+tiny_data(full_data):
+  tag: "300"
+  subset: 300
+
 get_sumstats: regression.R + R(res = mm_regression(as.matrix(data$X), 
                                                    as.matrix(data$Y), data$Z))
   @CONF: R_libs = abind
