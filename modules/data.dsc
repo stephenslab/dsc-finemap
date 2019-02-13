@@ -23,7 +23,7 @@ lite_data(full_data):
   tag: "2k"
   subset: 2000
              
-liter_data(full_data):
+small_data(full_data):
   tag: "1k"
   subset: 1000
 
