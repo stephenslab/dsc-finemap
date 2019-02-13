@@ -41,13 +41,13 @@ dap_z: fit_dap.py + Python(posterior = dap_batch_z(sumstats['bhat']/sumstats['sh
                                                        ld, cache, args))
   sumstats: $sumstats
   ld: $ld_file
-  args: "-t 4"
+  args: "-ld_control 0.20 --all"
   cache: file(DAP)
   $posterior: posterior
 
 susie: fit_susie.R
   # Prior variance of nonzero effects.
-  @CONF: R_libs = susieR@stephenslab/susieR
+  @CONF: R_libs = susieR
   maxI: 200
   maxL: 10
   null_weight: 0, 0.5, 0.9, 0.95
@@ -57,7 +57,7 @@ susie: fit_susie.R
   $fitted: fitted
 
 susie_auto: fit_susie.R
-  @CONF: R_libs = susieR@stephenslab/susieR
+  @CONF: R_libs = susieR
   data: $data
   prior_var: "auto"
   $posterior: posterior
@@ -75,7 +75,7 @@ susie10(susie):
 #------------------------------
 
 init_oracle: initialize.R + R(s_init=init_susie($(data)$true_coef))
-  @CONF: R_libs = susieR@stephenslab/susieR
+  @CONF: R_libs = susieR
   $s_init: s_init
 
 susie_z: susie_z.R + \

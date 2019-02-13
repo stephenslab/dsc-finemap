@@ -8,7 +8,7 @@ susie_z_analyze = function(z, R, L, s_init, estimate_residual_variance) {
 susie_z_multiple = function(Z, R, L, s_init, estimate_residual_variance) {
   fitted = list()
   posterior = list()
-  if (is.null(dim(Z))) Z = matrix(Z)
+  if (is.null(dim(Z))) Z = matrix(ncol=1, Z)
   for (r in 1:ncol(Z)) {
     if (is.na(s_init))
       fitted[[r]] = susie_z_analyze(Z[,r], R, L, list(), estimate_residual_variance)

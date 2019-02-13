@@ -68,4 +68,6 @@ def dap_batch(X, Y, prefix, *args):
     return dict([(r, dap_single(X, Y[:,r], f'{prefix}_condition_{r+1}', r+1, args)) for r in range(Y.shape[1])])
 
 def dap_batch_z(z, ld, prefix, *args):
+    if len(z.shape) == 1:
+        z = np.reshape(z, (z.shape[0], 1))
     return dict([(r, dap_single_z(z[:,r], ld, f'{prefix}_condition_{r+1}', args)) for r in range(z.shape[1])])
