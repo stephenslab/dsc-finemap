@@ -15,5 +15,5 @@ DSC:
     susie: data * simulate * get_sumstats * ((susie_z, susie, susie_oracle) * (score_susie, plot_susie))
   exec_path: code
   global:
-    data_file: data/X_random.txt
+    data_file: data/gtex-manifest.txt
   output: output/susie_z_full_data
