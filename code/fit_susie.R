@@ -11,6 +11,7 @@ for (r in 1:ncol(Y)) {
                                estimate_residual_variance=TRUE,
                                estimate_prior_variance=TRUE,
                                null_weight=null_weight,
+                               optimV_method = V_method,
                                coverage=0.95,min_abs_corr=0.5,
                                tol=1e-3)
   } else {

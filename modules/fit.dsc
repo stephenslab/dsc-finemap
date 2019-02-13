@@ -97,3 +97,15 @@ susie_z_large(susie_z):
 susie_z_init(susie_z):
   s_init: $s_init
   L: 10
+
+#------------------------------
+# Kaiqian's V method comparison
+#------------------------------
+
+susie_uniroot(susie):
+  V_method: "uniroot"
+  null_weight: 0
+  prior_var: 0
+
+susie_em(susie_uniroot):
+  V_method: "EM"
