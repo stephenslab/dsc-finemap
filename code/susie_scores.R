@@ -1,17 +1,18 @@
-#' @title Check if produced confidence sets are duplicated
+#' @title Check if produced confidence sets have overlaps
 #' @param cs a list a susie confidence sets from susie fit
-#' @return a boolean 1 if duplicated, 0 otherwise
-check_duplicate = function(cs){
-  cs.length = length(cs)
-  if (cs.length == 0){
+#' @return a boolean 1 if overlap, 0 otherwise
+check_overlap = function(cs) {
+  if (length(cs) == 0) {
     return(0)
-  }else{
-    cs.vec = unlist(cs)
-    if (sum(duplicated(cs.vec)) > 0){
-      return(1)
-    }else{
-      return(0)
+  } else {
+    overlaps = 0
+    for (i in 1:length(cs)) {
+      for (j in 1:i) {
+        if (i == j) next
+        overlaps = overlaps + length(intersect(cs[[i]], cs[[j]]))
+      }
     }
+    return(overlaps)
   }
 }
 
@@ -47,11 +48,11 @@ susie_scores = function(sets, pip, true_coef) {
       if (set.idx[highest.idx]%in%beta_idx) top_hit=top_hit+1
     }
   }
-  return(list(total=total, valid=valid, size=size, purity=purity, top=top_hit, has_duplicate=check_duplicate(cs)))
+  return(list(total=total, valid=valid, size=size, purity=purity, top=top_hit, has_overlap=check_overlap(cs)))
 }
 
 susie_scores_multiple = function(res, truth) {
-  total = valid = size = purity = top = has_duplicate = 0
+  total = valid = size = purity = top = overlap = 0
   objective = vector()
   converged = vector()
   for (r in 1:length(res)) {
@@ -61,9 +62,9 @@ susie_scores_multiple = function(res, truth) {
     size = size + out$size
     purity = purity + out$purity
     top = top + out$top
-    has_duplicate = has_duplicate + out$has_duplicate
+    overlap = overlap + out$has_overlap
     objective[r] = susieR::susie_get_objective(res[[r]])
     converged[r] = res[[r]]$converged
   }
-  return(list(total=total, valid=valid, size=size, purity=purity, top=top, objective=objective, converged=sum(converged)))
+  return(list(total=total, valid=valid, size=size, purity=purity, top=top, objective=objective, converged=sum(converged), overlap=overlap))
 }

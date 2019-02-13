@@ -33,3 +33,4 @@ score_susie: susie_scores.R + R(sc = susie_scores_multiple($(fitted), $(meta)$tr
     $top: sc$top
     $objective: sc$objective
     $converged: sc$converged
+    $overlap: sc$overlap
