@@ -14,4 +14,3 @@ DSC:
   exec_path: code
   global:
     data_file: data/gtex-manifest.txt
-
