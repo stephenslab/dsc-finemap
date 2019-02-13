@@ -40,7 +40,7 @@ sim_gaussian = function(X.cs, pve, effect_num, effect_weight){
     Y = (sim.y - mean(sim.y))/sd(sim.y)
   }
 
-  return(list(sim_y = sim.y, sigma = sigma, sigma_std = sigma/sd(sim.y),
+  return(list(Y = Y, sigma = sigma, sigma_std = sigma/sd(sim.y),
               beta = beta, mean_corX = mean_corX))
 }
 
@@ -51,8 +51,8 @@ sim_gaussian_multiple = function(data, pve, effect_num, effect_weight, n_traits=
   dat$sigma_std = vector()
   for (r in 1:n_traits) {
     res = sim_gaussian(dat$X, pve, effect_num, effect_weight)
-    if (is.null(dat$Y)) dat$Y = res$sim_y
-    else dat$Y = cbind(dat$Y, res$sim_y)
+    if (is.null(dat$Y)) dat$Y = as.matrix(res$Y)
+    else dat$Y = cbind(dat$Y, as.matrix(res$Y))
     if (is.null(dat$true_coef)) dat$true_coef = as.matrix(res$beta)
     else dat$true_coef = cbind(dat$true_coef, as.matrix(res$beta))
     dat$sigma_std[r] = res$sigma_std

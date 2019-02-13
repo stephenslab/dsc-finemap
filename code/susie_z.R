@@ -16,5 +16,5 @@ susie_z_multiple = function(Z, R, L, s_init, estimate_residual_variance) {
       fitted[[r]] = susie_z_analyze(Z[,r], R, L, s_init[[r]], estimate_residual_variance)
     posterior[[r]] = summary(fitted[[r]])
   }
-  return(fitted=fitted, posterior=posterior)
+  return(list(fitted=fitted, posterior=posterior))
 }

@@ -12,7 +12,7 @@
 # $posterior: for inference
 
 caviar: fit_caviar.R + \
-             R(posterior = finemap_mcaviar(sumstats[1,,]/sumstats[2,,], 
+             R(posterior = finemap_mcaviar(sumstats$bhat/sumstats$shat, 
                                             ld, args, prefix=cache))
   @CONF: R_libs = (dplyr, magrittr)
   sumstats: $sumstats
@@ -22,7 +22,7 @@ caviar: fit_caviar.R + \
   $posterior: posterior
 
 finemap(caviar): fit_finemap.R + \
-             R(posterior = finemap_mvar(sumstats[1,,] / sumstats[2,,],
+             R(posterior = finemap_mvar(sumstats$bhat / sumstats$shat,
                                         ld, N, k,
                                         args, prefix=cache))
   N: $N
@@ -37,7 +37,7 @@ dap: fit_dap.py + Python(posterior = dap_batch(data['X'], data['Y'], cache, args
   cache: file(DAP)
   $posterior: posterior
 
-dap_z: fit_dap.py + Python(posterior = dap_batch_z(sumstats[0,:,:]/sumstats[1,:,:],
+dap_z: fit_dap.py + Python(posterior = dap_batch_z(sumstats['bhat']/sumstats['shat'],
                                                        ld, cache, args))
   sumstats: $sumstats
   ld: $ld_file
@@ -79,13 +79,13 @@ init_oracle: initialize.R + R(s_init=init_susie($(data)$true_coef))
   $s_init: s_init
 
 susie_z: susie_z.R + \
-              R(res = susie_z_multiple(sumstats[1,,]/sumstats[2,,],
+              R(res = susie_z_multiple(sumstats$bhat/sumstats$shat,
                 $(ld_mat), L, s_init, estimate_residual_variance))
   sumstats: $sumstats
   s_init: NA
   L: 5, 10
   estimate_residual_variance: TRUE
-  $fit: res$fitted
+  $fitted: res$fitted
   $posterior: res$posterior
 
 susie_z_large(susie_z):
