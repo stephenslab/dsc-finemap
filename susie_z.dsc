@@ -9,9 +9,10 @@ DSC:
   define:
     data: tiny_data
     simulate: sim_gaussian_null, sim_gaussian
+    susie_oracle: init_oracle * susie_z_init
   run:
-    default: data * simulate * get_sumstats * ((fit_susie_z, fit_susie) * (score_susie, plot_susie), fit_dap * plot_dap, fit_caviar * plot_caviar, fit_finemap * plot_finemap)
-    susie: data * simulate * get_sumstats * ((fit_susie_z, fit_susie) * (score_susie, plot_susie))
+    default: data * simulate * get_sumstats * ((susie_z, susie) * (score_susie, plot_susie), dap * plot_dap, caviar * plot_caviar, finemap * plot_finemap)
+    susie: data * simulate * get_sumstats * ((susie_z, susie, susie_oracle) * (score_susie, plot_susie))
   exec_path: code
   global:
     data_file: data/yuxin-toy.txt

@@ -11,7 +11,7 @@
 # $fitted: for diagnostics
 # $posterior: for inference
 
-fit_caviar: fit_caviar.R + \
+caviar: fit_caviar.R + \
              R(posterior = finemap_mcaviar(sumstats[1,,]/sumstats[2,,], 
                                             ld, args, prefix=cache))
   @CONF: R_libs = (dplyr, magrittr)
@@ -21,7 +21,7 @@ fit_caviar: fit_caviar.R + \
   cache: file(CAVIAR)
   $posterior: posterior
 
-fit_finemap(fit_caviar): fit_finemap.R + \
+finemap(caviar): fit_finemap.R + \
              R(posterior = finemap_mvar(sumstats[1,,] / sumstats[2,,],
                                         ld, N, k,
                                         args, prefix=cache))
@@ -31,13 +31,13 @@ fit_finemap(fit_caviar): fit_finemap.R + \
   args: "--n-causal-max 1", "--n-causal-max 2", "--n-causal-max 3"
   cache: file(FM)
 
-fit_dap: fit_dap.py + Python(posterior = dap_batch(data['X'], data['Y'], cache, args))
+dap: fit_dap.py + Python(posterior = dap_batch(data['X'], data['Y'], cache, args))
   data: $data
   args: "-ld_control 0.20 --all"
   cache: file(DAP)
   $posterior: posterior
 
-fit_dap_z: fit_dap.py + Python(posterior = dap_batch_z(sumstats[0,:,:]/sumstats[1,:,:],
+dap_z: fit_dap.py + Python(posterior = dap_batch_z(sumstats[0,:,:]/sumstats[1,:,:],
                                                        ld, cache, args))
   sumstats: $sumstats
   ld: $ld_file
@@ -45,7 +45,7 @@ fit_dap_z: fit_dap.py + Python(posterior = dap_batch_z(sumstats[0,:,:]/sumstats[
   cache: file(DAP)
   $posterior: posterior
 
-fit_susie: fit_susie.R
+susie: fit_susie.R
   # Prior variance of nonzero effects.
   @CONF: R_libs = susieR@stephenslab/susieR
   maxI: 200
@@ -56,22 +56,41 @@ fit_susie: fit_susie.R
   $posterior: posterior
   $fitted: fitted
 
-fit_susie_auto: fit_susie.R
+susie_auto: fit_susie.R
   @CONF: R_libs = susieR@stephenslab/susieR
   data: $data
   prior_var: "auto"
   $posterior: posterior
   $fitted: fitted
 
-fit_susie01(fit_susie):
+susie01(susie):
   null_weight: 0
   maxL: 1
 
-fit_susie10(fit_susie):
+susie10(susie):
   maxL: 15
 
 #------------------------------
 # SuSiE with summary statistics
 #------------------------------
 
-fit_susie_z: fit_susie_z.R
+init_oracle: initialize.R + R(s_init=init_susie($(data)$true_coef))
+  @CONF: R_libs = susieR@stephenslab/susieR
+  $s_init: s_init
+
+susie_z: susie_z.R + \
+              R(res = susie_z_multiple(sumstats[1,,]/sumstats[2,,],
+                $(ld_mat), L, s_init, estimate_residual_variance))
+  sumstats: $sumstats
+  s_init: NA
+  L: 5, 10
+  estimate_residual_variance: TRUE
+  $fit: res$fitted
+  $posterior: res$posterior
+
+susie_z_large(susie_z):
+  L: 201
+
+susie_z_init(susie_z):
+  s_init: $s_init
+  L: 10

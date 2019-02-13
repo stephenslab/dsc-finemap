@@ -5,8 +5,7 @@
 #' @param effect_weight
 #' @return train_n a scalar number of trainning samples
 #' @return sim_y an n vector simulated gaussian y
-#' @return beta_idx a effect_num-length vector that includes indices of effects
-#' @return beta_val a effect_num-length vector that includes beta values
+#' @return beta a p vector of effects
 #' @return mean_corX mean of correlations of X (lower triangular entries of correlation matrix of X)
 sim_gaussian = function(X.cs, pve, effect_num, effect_weight){
   n = dim(X.cs)[1]
@@ -42,7 +41,7 @@ sim_gaussian = function(X.cs, pve, effect_num, effect_weight){
   }
 
   return(list(sim_y = sim.y, sigma = sigma, sigma_std = sigma/sd(sim.y),
-              beta_val = beta.values, mean_corX = mean_corX))
+              beta = beta, mean_corX = mean_corX))
 }
 
 # A wrapper for simulating multiple Y's
@@ -54,8 +53,8 @@ sim_gaussian_multiple = function(data, pve, effect_num, effect_weight, n_traits=
     res = sim_gaussian(dat$X, pve, effect_num, effect_weight)
     if (is.null(dat$Y)) dat$Y = res$sim_y
     else dat$Y = cbind(dat$Y, res$sim_y)
-    if (is.null(dat$true_coef)) dat$true_coef = res$beta_val
-    else dat$true_coef = cbind(dat$true_coef, res$beta_val)
+    if (is.null(dat$true_coef)) dat$true_coef = as.matrix(res$beta)
+    else dat$true_coef = cbind(dat$true_coef, as.matrix(res$beta))
     dat$sigma_std[r] = res$sigma_std
   }
   return(dat)
