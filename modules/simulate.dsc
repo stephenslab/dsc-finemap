@@ -1,3 +1,9 @@
+#---------------------------------------
+# Simulation modules written by Gao Wang
+# Used in SuSiE paper
+# Implemented in Python
+#---------------------------------------
+
 # base_sim:
 # - A base simulator of 2 independent multivariate effects
 # - using MultivariateMixture
@@ -39,3 +45,25 @@ lm_pve03(simple_lm):
 
 original_Y(base_sim):
   eff_mode: "original"
+
+#----------------------------------------
+# Simulation modules written by Yuxin Zou
+#----------------------------------------
+
+sim_gaussian: simulate.R + \
+                R(res=sim_gaussian_multiple(data, pve, n_signal, effect_weight))
+  @CONF: R_libs = susieR
+  data: $data
+  pve: 0.01, 0.2, 0.6, 0.8
+  n_signal: 1, 3, 5, 10
+  effect_weight: rep(1/n_signal, n_signal), c(rep(0.15/(n_signal-1), n_signal-1), 0.85)
+  $data: res
+  $N: nrow(res$X)
+
+sim_gaussian_null(sim_gaussian):
+  pve: 0
+  n_signal: 0
+  effect_weight: rep(1/n_signal, n_signal)
+
+sim_gaussian_large(sim_gaussian):
+  n_signal: 200
