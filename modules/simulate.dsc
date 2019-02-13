@@ -16,14 +16,13 @@ base_sim: lib_regression_simulator.py + \
   @CONF: python_modules = (seaborn, matplotlib, pprint)
   X: $X
   Y: $Y
-  top_idx: $top_idx
   n_signal: 3
   n_traits: 2
   amplitude: 1
   pve: 0.05, 0.1, 0.2, 0.4
   eff_mode: "simple_lm"
   residual_mode: "identity"
-  swap_eff: True
+  swap_eff: False
   keep_ld: True
   center_data: True
   cache: file(sim)

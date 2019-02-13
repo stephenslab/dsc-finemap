@@ -15,7 +15,8 @@ full_data: sim_utils.R + R(data =readRDS(dataset);
   subset: NULL
   $X: X
   $Y: data$Y
-  $top_idx: NA
+  $N: nrow(X)
+  $meta: data$meta
   $ld_file: file(ld)
         
 lite_data(full_data):
@@ -39,9 +40,10 @@ random_data: sim_utils.R + R(set.seed(seed);
   n: 1200
   p: 1000
   seed: -9
-  $top_idx: NA
   $X: X
   $Y: matrix(0,n,1)
+  $N: nrow(X)
+  $meta: list()
   $ld_file: file(ld)
 
 get_sumstats: regression.R + R(res = mm_regression(as.matrix(X), as.matrix(Y)))

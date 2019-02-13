@@ -13,7 +13,7 @@ def simulate_main(data, c, plot_prefix):
     n_signal: 3
     n_traits: 2
     eff_mode: simple_lm
-    swap_eff: True
+    swap_eff: False
     keep_ld: True
     tag: sim1
     @ALIAS: conf = Dict(!data, !eff_mode)
@@ -23,6 +23,8 @@ def simulate_main(data, c, plot_prefix):
     reg.X = data['X'].astype(float)
     if eff_mode == 'original':
         c['swap_eff'] = False
+    if 'top_idx' not in c:
+        c['top_idx'] = None
     if c['swap_eff'] and c['top_idx'] is None:
         raise ValueError(f'"top_idx" variable is not set by an upstream module')
     elif eff_mode == 'original':
