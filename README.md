@@ -39,7 +39,7 @@ To query DSC results, please run in R
 ```
 library(dscrutils)
 
-dscout <- dscquery(dsc.outdir='susie_v', targets="simple_lm.pve simple_lm.n_signal score_susie.total score_susie.size score_susie.valid score_susie.purity score_susie.top score_susie.objective score_susie.converged", groups="method: susie_uniroot susie_em susie_optim", omit.file.columns=T)
+dscout <- dscquery(dsc.outdir='susie_v', targets="simple_lm.pve simple_lm.n_signal score_susie.total score_susie.size score_susie.valid score_susie.purity score_susie.top score_susie.objective score_susie.converged method", groups="method: susie_uniroot susie_em susie_optim", omit.file.columns=T)
 ```
 
 
