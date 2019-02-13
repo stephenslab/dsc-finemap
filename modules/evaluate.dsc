@@ -19,16 +19,6 @@ plot_finemap: plot_finemap.R
 plot_caviar(plot_finemap): plot_caviar.R
 plot_dap(plot_finemap): plot_dap.R
 
-plot_sse: lib_regression_simulator.py + \
-            plot_sse.py + \
-            Python(plot_sse(result['PosteriorMean'], data['true_coef'],
-                            result['in_CI'], ld_mat, plot_file))
-  @CONF: python_modules = seaborn
-  data: $data
-  result: $posterior
-  ld_mat: $ld_mat
-  $plot_file: file(plot_file)
-
 plot_susie: plot_susie.R
   @CONF: R_libs = susieR
   data: $data

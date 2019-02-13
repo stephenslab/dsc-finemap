@@ -9,7 +9,6 @@ DSC for comparing fine-mapping methods.
 - output: 
 	- $data: (key-value) contains matrix $X, and optionally matrix $Y
 	- $ld_file: (file() object) filename for LD matrix
-	- $ld_mat: (matrix) LD matrix
 
 `get_sumstats` module
 - input: $data

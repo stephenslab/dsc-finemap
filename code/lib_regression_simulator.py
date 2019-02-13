@@ -168,7 +168,7 @@ class RegressionData(dotdict):
 
     def __str__(self):
         return pformat(self.__dict__, indent = 4)
-    
+
 class ResidualCorrelation:
     def __init__(self, mode, dim = 1):
         self.mode = mode

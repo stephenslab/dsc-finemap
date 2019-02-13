@@ -1,7 +1,8 @@
 def summarize_LD(X, ld_input, ld_plot):
+    import numpy as np
     data = RegressionData()
     data.X = X
-    data.set_xcorr(ld_input)
+    data.set_xcorr(np.loadtxt(ld_input))
     data.plot_xcorr(ld_plot)
     return data.get_representative_features()
 
@@ -11,7 +12,7 @@ def simulate_main(data, c, plot_prefix):
     top_idx: $top_eff
     n_signal: 3
     n_traits: 2
-    eff_mode: mash_low_het
+    eff_mode: simple_lm
     swap_eff: True
     keep_ld: True
     tag: sim1
@@ -24,10 +25,6 @@ def simulate_main(data, c, plot_prefix):
         c['swap_eff'] = False
     if c['swap_eff'] and c['top_idx'] is None:
         raise ValueError(f'"top_idx" variable is not set by an upstream module')
-    if eff_mode == 'mash_low_het':
-        if c['n_traits'] < 2:
-            raise ValueError(f'Cannot simulate {c["n_traits"]} under mode {eff_mode}')
-        data['true_coef'], data['residual_variance'] = mash_low_het(data, reg, c)
     elif eff_mode == 'original':
         data['true_coef'] = original_y(data, reg, c)
         data['residual_variance'] = None

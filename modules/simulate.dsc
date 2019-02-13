@@ -18,7 +18,9 @@ base_sim: lib_regression_simulator.py + \
   top_idx: $top_idx
   n_signal: 3
   n_traits: 2
-  eff_mode: "mash_low_het"
+  amplitude: 1
+  pve: 0.05, 0.1, 0.2, 0.4
+  eff_mode: "simple_lm"
   residual_mode: "identity"
   swap_eff: True
   keep_ld: True
@@ -31,9 +33,6 @@ base_sim: lib_regression_simulator.py + \
   $N: data['Y'].shape[0]
 
 simple_lm(base_sim):
-  eff_mode: "simple_lm"
-  amplitude: 1
-  pve: 0.05, 0.1, 0.2, 0.4
   n_signal: 1, 2, 3, 4, 5
 
 lm_pve02(simple_lm):

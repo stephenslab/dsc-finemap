@@ -80,7 +80,8 @@ init_oracle: initialize.R + R(s_init=init_susie($(data)$true_coef))
 
 susie_z: susie_z.R + \
               R(res = susie_z_multiple(sumstats$bhat/sumstats$shat,
-                $(ld_mat), L, s_init, estimate_residual_variance))
+                $(ld_file), L, s_init, estimate_residual_variance))
+  @CONF: R_libs = (susieR, data.table)
   sumstats: $sumstats
   s_init: NA
   L: 5, 10
