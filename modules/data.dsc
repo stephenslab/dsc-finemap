@@ -8,7 +8,7 @@
 
 full_data: sim_utils.R + R(data =readRDS(dataset);
             X = center_scale(data$X[,get_center(subset, ncol(data$X))]);
-            r = round(cor(X), 4);
+            r = cor(X);
             write.table(r,ld_file,quote=F,col.names=F,row.names=F))
   tag: "full"
   dataset: Shell{head -150 ${data_file}}
