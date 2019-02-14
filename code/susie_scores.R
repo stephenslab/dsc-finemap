@@ -54,6 +54,7 @@ susie_scores_multiple = function(res, truth) {
   total = valid = size = purity = top = has_duplicate = 0
   objective = vector()
   converged = vector()
+  niter = vector()
   for (r in 1:length(res)) {
     out = susie_scores(res[[r]]$sets, res[[r]]$pip, truth[,r])
     total = total + out$total
@@ -64,6 +65,7 @@ susie_scores_multiple = function(res, truth) {
     has_duplicate = has_duplicate + out$has_duplicate
     objective[r] = susieR::susie_get_objective(res[[r]])
     converged[r] = res[[r]]$converged
+    niter[r] = res[[r]]$niter
   }
-  return(list(total=total, valid=valid, size=size, purity=purity, top=top, objective=objective, converged=sum(converged)))
+  return(list(total=total, valid=valid, size=size, purity=purity, top=top, objective=objective, converged=sum(converged), niter = niter))
 }
