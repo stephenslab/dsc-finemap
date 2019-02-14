@@ -34,3 +34,19 @@ score_susie: susie_scores.R + R(sc = susie_scores_multiple($(fitted), $(meta)$tr
     $objective: sc$objective
     $converged: sc$converged
     $overlap: sc$overlap
+    $signal_pip: sc$signal_pip
+
+score_dap: dap_scores.R + R(sc = dap_scores_multiple($(posterior), $(meta)$true_coef))
+    $total: sc$total
+    $valid: sc$valid
+    $size: median(sc$size)
+    $avgr2: median(sc$avgr2)
+    $top: sc$top
+    $overlap: sc$overlap
+    $signal_pip: sc$signal_pip
+
+score_finemap: finemap_scores.R + R(sc = finemap_scores_multiple($(posterior), $(meta)$true_coef))
+    $total: sc$total
+    $valid: sc$valid
+    $size: median(sc$size)
+    $signal_pip: sc$signal_pip

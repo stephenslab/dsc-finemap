@@ -12,7 +12,7 @@
 # $posterior: for inference
 
 caviar: fit_caviar.R + \
-             R(posterior = finemap_mcaviar(sumstats$bhat/sumstats$shat, 
+             R(posterior = finemap_mcaviar(sumstats$bhat/sumstats$shat,
                                             ld, args, prefix=cache))
   @CONF: R_libs = (dplyr, magrittr)
   sumstats: $sumstats
@@ -27,12 +27,12 @@ finemap(caviar): fit_finemap.R + \
                                         args, prefix=cache))
   N: $N
   k: NULL
-  args: "--n-causal-max 1", "--n-causal-max 2", "--n-causal-max 3"
+  args: "--n-causal-max 5"
   cache: file(FM)
 
 dap: fit_dap.py + Python(posterior = dap_batch(X, Y, cache, args))
   X: $X
-  Y: $Y 
+  Y: $Y
   args: "-ld_control 0.20 --all"
   cache: file(DAP)
   $posterior: posterior

@@ -16,6 +16,7 @@ check_overlap = function(cs) {
   }
 }
 
+
 #' @title Compare SuSiE fits to truth
 #' @param sets a list of susie CS info from susie fit
 #' @param pip probability for p variables
@@ -23,20 +24,21 @@ check_overlap = function(cs) {
 #' @return total the number of total CS
 #' @return valid the number of CS that captures a true signal
 #' @return size an array of size of CS
-#' @return purity an array of purity of CS
+#' @return angr2 an array of average R^2 of CS
 #' @return top the number of CS whose highest PIP is the true causal
-susie_scores = function(sets, pip, true_coef) {
+dap_scores = function(sets, pip, true_coef) {
   if (is.null(dim(true_coef))) beta_idx = which(true_coef!=0)
   else beta_idx = which(apply(true_coef, 1, sum) != 0)
-  cs = sets$cs
+  cs = apply(sets, 1, function(cluster) as.numeric(strsplit(cluster[4], ",")[[1]]))
+
   if (is.null(cs)) {
     size = 0
     total = 0
     purity = 0
   } else {
     size = sapply(cs,length)
-    purity = as.vector(sets$purity[,1])
-    total = length(cs)
+    avgr2 = as.vector(sets$cluster_avg_r2)
+    total = nrow(sets)
   }
   valid = 0
   top_hit = 0
@@ -48,27 +50,26 @@ susie_scores = function(sets, pip, true_coef) {
       if (set.idx[highest.idx]%in%beta_idx) top_hit=top_hit+1
     }
   }
-  return(list(total=total, valid=valid, size=size, purity=purity, top=top_hit, has_overlap=check_overlap(cs),
-              signal_pip = pip[beta_idx]))
+  return(list(total=total, valid=valid, size=size, avgr2=avgr2, top=top_hit,
+              has_overlap=check_overlap(cs), signal_pip = pip[beta_idx]))
 }
 
-susie_scores_multiple = function(res, truth) {
-  total = valid = size = purity = top = overlap = 0
+dap_scores_multiple = function(res, truth) {
+  total = valid = size = avgr2 = top = overlap = 0
   signal_pip = list()
-  objective = vector()
-  converged = vector()
   for (r in 1:length(res)) {
-    out = susie_scores(res[[r]]$sets, res[[r]]$pip, truth[,r])
+    set = res[[r]]$set
+    snps = res[[r]]$snp
+    snps = snps[order(snps$snp),]
+    set = set[which(set$cluster_prob > 0.95),]
+    out = dap_scores(set, snps$snp_prob, truth[,r])
     total = total + out$total
     valid = valid + out$valid
     size = size + out$size
-    purity = purity + out$purity
+    avgr2 = avgr2 + out$avgr2
     top = top + out$top
     overlap = overlap + out$has_overlap
-    objective[r] = susieR::susie_get_objective(res[[r]])
-    converged[r] = res[[r]]$converged
     signal_pip[[r]] = out$signal_pip
   }
-  return(list(total=total, valid=valid, size=size, purity=purity, top=top, objective=objective, converged=sum(converged),
-              overlap=overlap, signal_pip = unlist(signal_pip)))
+  return(list(total=total, valid=valid, size=size, avgr2=avgr2, top=top, overlap=overlap, signal_pip = unlist(signal_pip)))
 }
