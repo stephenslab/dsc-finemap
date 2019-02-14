@@ -10,7 +10,7 @@ DSC:
     data: random_data
     simulate: sim_gaussian
   run:
-    default: random_data * simulate * get_sumstats * (susie_z_uniroot) * (score_susie, plot_susie)
+    default: random_data * simulate * get_sumstats * (susie_z_uniroot, susie_em, susie_optim) * (score_susie, plot_susie)
   exec_path: code
   global:
     data_file: data/gtex-manifest.txt
