@@ -86,7 +86,7 @@ susie_z: susie_z.R + \
   @CONF: R_libs = (susieR, data.table)
   sumstats: $sumstats
   s_init: NA
-  L: 5, 10
+  L: 5
   estimate_residual_variance: TRUE
   $fitted: res$fitted
   $posterior: res$posterior
