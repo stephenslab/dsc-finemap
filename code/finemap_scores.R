@@ -35,7 +35,7 @@ finemap_scores_multiple = function(res, truth) {
       set = apply(set[1:n,], 1, function(config) as.numeric(strsplit(config[2], ",")[[1]]))
       set = unique(as.vector(unlist(set)))
     }
-    snps = snps[order(snps$snp),]
+    snps = snps[order(as.numeric(snps$snp)),]
 
     out = finemap_scores(set, snps$snp_prob, truth[,r])
     total = total + out$total

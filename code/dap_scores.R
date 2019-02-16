@@ -60,7 +60,7 @@ dap_scores_multiple = function(res, truth) {
   for (r in 1:length(res)) {
     set = res[[r]]$set
     snps = res[[r]]$snp
-    snps = snps[order(snps$snp),]
+    snps = snps[order(as.numeric(snps$snp)),]
     set = set[which(set$cluster_prob > 0.95),]
     out = dap_scores(set, snps$snp_prob, truth[,r])
     total = total + out$total
