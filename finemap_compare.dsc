@@ -11,7 +11,7 @@ DSC:
     simulate: sim_gaussian_null, sim_gaussian
     susie_oracle: init_oracle * susie_z_init
   run:
-    default: data * simulate * get_sumstats * ((susie_z, susie_oracle) * (score_susie, plot_susie), dap_z * (socre_dap, plot_dap), finemap * (socre_finemap, plot_finemap))
+    default: data * simulate * get_sumstats * ((susie_z, susie_oracle) * (score_susie, plot_susie), dap_z * (score_dap, plot_dap), finemap * (score_finemap, plot_finemap))
     susie: data * simulate * get_sumstats * ((susie_z, susie, susie_oracle) * (score_susie, plot_susie))
   exec_path: code
   global:
