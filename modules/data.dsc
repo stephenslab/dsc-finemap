@@ -33,7 +33,7 @@ tiny_data(full_data):
 
 random_data: sim_utils.R + R(set.seed(seed);
               X = center_scale(matrix(rnorm(n*p), n, p));
-              r = round(cor(X), 4);
+              r = cor(X);
               write.table(r,ld_file,quote=F,col.names=F,row.names=F))
   @CONF: R_libs = susieR
   tag: "random"
