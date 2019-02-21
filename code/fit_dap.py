@@ -1,6 +1,8 @@
 import subprocess
 import pandas as pd
 import numpy as np
+import multiprocessing
+import sys
 
 def write_dap_full(x,y,prefix,r):
     names = np.array([('geno', i+1, f'group{r}') for i in range(x.shape[1])])
@@ -59,10 +61,18 @@ def dap_single(x, y, prefix, r, args):
     run_dap_full(prefix,args)
     return extract_dap_output(prefix)
 
-def dap_single_z(z, ld, prefix, args):
+def dap_single_z(z, ld, prefix, args, timeout = 3600):
     write_dap_ss(z,prefix)
-    run_dap_z(ld,prefix,args)
-    return extract_dap_output(prefix)
+    p = multiprocessing.Process(target=run_dap_z, name="dap_z", args=(ld,prefix,args))
+    p.start()
+    p.join(timeout)
+    if p.is_alive():
+        sys.stderr.write(f"dap-z is running for over {timeout}s ... let's kill it...\n")
+        p.terminate()
+        p.join()
+        return {'snp': None, 'set': None}
+    else:
+        return extract_dap_output(prefix)
 
 def dap_batch(X, Y, prefix, *args):
     return dict([(r, dap_single(X, Y[:,r], f'{prefix}_condition_{r+1}', r+1, args)) for r in range(Y.shape[1])])
