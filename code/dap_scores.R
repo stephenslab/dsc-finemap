@@ -29,12 +29,17 @@ check_overlap = function(cs) {
 dap_scores = function(sets, pip, true_coef) {
   if (is.null(dim(true_coef))) beta_idx = which(true_coef!=0)
   else beta_idx = which(apply(true_coef, 1, sum) != 0)
+  
+  if(is.null(sets)){
+    return(list(total=-1, valid=-1, size=-1, avgr2=-1, top=-1,
+                has_overlap=-1, signal_pip = -1))
+  }
+  
   if(nrow(sets) == 0){
     cs = NULL
   }else{
     cs = apply(sets, 1, function(cluster) as.numeric(strsplit(cluster[4], ",")[[1]]))
   }
-
 
   if (is.null(cs)) {
     size = 0
