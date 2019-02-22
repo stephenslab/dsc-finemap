@@ -48,7 +48,7 @@ default:
   mem_per_cpu: 3G
 
 dap_z:
-  time_per_instance: 1h
+  time_per_instance: 61m
   instances_per_job: 5
-  mem_per_cpu: 5G
+  mem_per_cpu: 6G
 

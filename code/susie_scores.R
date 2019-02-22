@@ -28,6 +28,10 @@ check_overlap = function(cs) {
 susie_scores = function(sets, pip, true_coef) {
   if (is.null(dim(true_coef))) beta_idx = which(true_coef!=0)
   else beta_idx = which(apply(true_coef, 1, sum) != 0)
+  if(is.null(sets)){
+    return(list(total=NA, valid=NA, size=NA, purity=NA, top=NA, has_overlap=NA,
+              signal_pip = NA))
+  }
   cs = sets$cs
   if (is.null(cs)) {
     size = 0

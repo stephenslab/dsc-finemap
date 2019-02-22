@@ -31,8 +31,8 @@ dap_scores = function(sets, pip, true_coef) {
   else beta_idx = which(apply(true_coef, 1, sum) != 0)
   
   if(is.null(sets)){
-    return(list(total=-1, valid=-1, size=-1, avgr2=-1, top=-1,
-                has_overlap=-1, signal_pip = -1))
+    return(list(total=NA, valid=NA, size=NA, avgr2=NA, top=NA,
+                has_overlap=NA, signal_pip = NA))
   }
   
   if(nrow(sets) == 0){
