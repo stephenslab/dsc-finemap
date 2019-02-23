@@ -69,8 +69,13 @@ susie_scores_multiple = function(res, truth) {
     purity = purity + out$purity
     top = top + out$top
     overlap = overlap + out$has_overlap
-    objective[r] = susieR::susie_get_objective(res[[r]])
-    converged[r] = res[[r]]$converged
+    if(is.null(susieR::susie_get_objective(res[[r]]))){
+      objective[r] = NA
+      converged[r] = NA
+    }else{
+      objective[r] = susieR::susie_get_objective(res[[r]])
+      converged[r] = res[[r]]$converged
+    }
     signal_pip[[r]] = out$signal_pip
   }
   return(list(total=total, valid=valid, size=size, purity=purity, top=top, objective=objective, converged=sum(converged),
