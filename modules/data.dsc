@@ -7,17 +7,24 @@
 # $sumstats: summary statistics
 
 full_data: sim_utils.R + R(data =readRDS(dataset);
-            X = center_scale(data$X[,get_center(subset, ncol(data$X))]);
+            in_sample = sample(1:nrow(data$X), ceiling(nrow(data$X)/2));
+            X.all = data$X[,get_center(subset, ncol(data$X))];
+            X = center_scale(X[in_sample,]);
+            X_out = center_scale(X[-in_sample,]);
             r = cor(X);
-            write.table(r,ld_file,quote=F,col.names=F,row.names=F))
+            r_out = cor(X_out);
+            write.table(r,ld_in_file,quote=F,col.names=F,row.names=F);
+            write.table(r_out,ld_out_file,quote=F,col.names=F,row.names=F))
   tag: "full"
   dataset: Shell{head -150 ${data_file}}
   subset: NULL
   $X: X
+  $X_out: X_out
   $Y: data$Y
-  $N: nrow(X)
+  $N_in: nrow(X_in)
   $meta: data$meta
-  $ld_file: file(ld)
+  $ld_in_file: file(ld_in)
+  $ld_out_file: file(ld_out)
         
 lite_data(full_data):
   tag: "2k"
@@ -48,7 +55,7 @@ random_data: sim_utils.R + R(set.seed(seed);
 
 get_sumstats: regression.R + R(res = mm_regression(as.matrix(X), as.matrix(Y)))
   @CONF: R_libs = abind
-  X: $X
+  X: $X_in
   Y: $Y
   $sumstats: res
                                                    

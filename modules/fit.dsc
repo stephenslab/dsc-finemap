@@ -40,7 +40,7 @@ dap: fit_dap.py + Python(posterior = dap_batch(X, Y, cache, args))
 dap_z: fit_dap.py + Python(posterior = dap_batch_z(sumstats['bhat']/sumstats['shat'],
                                                        ld, cache, args))
   sumstats: $sumstats
-  ld: $ld_file
+  ld: $ld_in_file, $ld_out_file
   args: "-ld_control 0.20 --all"
   cache: file(DAP)
   $posterior: posterior
@@ -82,11 +82,12 @@ init_oracle: initialize.R + R(s_init=init_susie($(meta)$true_coef))
 
 susie_z: susie_z.R + \
               R(res = susie_z_multiple(sumstats$bhat/sumstats$shat,
-                $(ld_file), L, s_init, estimate_residual_variance))
+                ld, L, s_init, estimate_residual_variance))
   @CONF: R_libs = (susieR, data.table)
   sumstats: $sumstats
   s_init: NA
   L: 5
+  ld: $ld_in_file, $ld_out_file
   estimate_residual_variance: TRUE
   $fitted: res$fitted
   $posterior: res$posterior
@@ -95,5 +96,25 @@ susie_z_large(susie_z):
   L: 201
 
 susie_z_init(susie_z):
+  s_init: $s_init
+  L: 10
+
+susie_bhat: susie_bhat.R + \
+              R(res = susie_bhat_multiple(sumstats$bhat, sumstats$shat,
+                ld, n, L, s_init, estimate_residual_variance))
+  @CONF: R_libs = (susieR, data.table)
+  sumstats: $sumstats
+  s_init: NA
+  n: $N_in
+  L: 5
+  ld: $ld_in_file, $ld_out_file
+  estimate_residual_variance: TRUE
+  $fitted: res$fitted
+  $posterior: res$posterior
+
+susie_bhat_large(susie_bhat):
+  L: 201
+
+susie_bhat_init(susie_bhat):
   s_init: $s_init
   L: 10
