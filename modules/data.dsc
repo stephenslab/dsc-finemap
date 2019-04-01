@@ -23,8 +23,7 @@ full_data: sim_utils.R + R(data =readRDS(dataset);
   $Y: data$Y
   $N_in: nrow(X_in)
   $meta: data$meta
-  $ld_in_file: file(ld_in)
-  $ld_out_file: file(ld_out)
+  $ld: list(in_sample = file(ld_in), out_sample = file(ld_out))
         
 lite_data(full_data):
   tag: "2k"

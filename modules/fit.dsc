@@ -13,17 +13,18 @@
 
 caviar: fit_caviar.R + \
              R(posterior = finemap_mcaviar(sumstats$bhat/sumstats$shat,
-                                            ld, args, prefix=cache))
+                                            ld[[ld_method]], args, prefix=cache))
   @CONF: R_libs = (dplyr, magrittr)
   sumstats: $sumstats
-  ld: $ld_file
+  ld: $ld
+  ld_method: "in_sample", "out_sample"
   args: "-g 0.001 -c 1", "-g 0.001 -c 2", "-g 0.001 -c 3"
   cache: file(CAVIAR)
   $posterior: posterior
 
 finemap(caviar): fit_finemap.R + \
              R(posterior = finemap_mvar(sumstats$bhat / sumstats$shat,
-                                        ld, N, k,
+                                        ld[[ld_method]], N, k,
                                         args, prefix=cache))
   N: $N
   k: NULL
@@ -38,9 +39,10 @@ dap: fit_dap.py + Python(posterior = dap_batch(X, Y, cache, args))
   $posterior: posterior
 
 dap_z: fit_dap.py + Python(posterior = dap_batch_z(sumstats['bhat']/sumstats['shat'],
-                                                       ld, cache, args))
+                                                       ld[[ld_method]], cache, args))
   sumstats: $sumstats
-  ld: $ld_in_file, $ld_out_file
+  ld: $ld
+  ld_method: "in_sample", "out_sample"
   args: "-ld_control 0.20 --all"
   cache: file(DAP)
   $posterior: posterior
@@ -82,12 +84,13 @@ init_oracle: initialize.R + R(s_init=init_susie($(meta)$true_coef))
 
 susie_z: susie_z.R + \
               R(res = susie_z_multiple(sumstats$bhat/sumstats$shat,
-                ld, L, s_init, estimate_residual_variance))
+                ld[[ld_method]], L, s_init, estimate_residual_variance))
   @CONF: R_libs = (susieR, data.table)
   sumstats: $sumstats
   s_init: NA
   L: 5
-  ld: $ld_in_file, $ld_out_file
+  ld: $ld
+  ld_method: "in_sample", "out_sample"
   estimate_residual_variance: TRUE
   $fitted: res$fitted
   $posterior: res$posterior
@@ -101,13 +104,14 @@ susie_z_init(susie_z):
 
 susie_bhat: susie_bhat.R + \
               R(res = susie_bhat_multiple(sumstats$bhat, sumstats$shat,
-                ld, n, L, s_init, estimate_residual_variance))
+                ld[[ld_method]], n, L, s_init, estimate_residual_variance))
   @CONF: R_libs = (susieR, data.table)
   sumstats: $sumstats
   s_init: NA
   n: $N_in
   L: 5
-  ld: $ld_in_file, $ld_out_file
+  ld: $ld
+  ld_method: "in_sample", "out_sample"
   estimate_residual_variance: TRUE
   $fitted: res$fitted
   $posterior: res$posterior
