@@ -14,7 +14,7 @@ full_data: sim_utils.R + R(data =readRDS(dataset);
             r = cor(X);
             r_out = cor(X_out);
             write.table(r,ld_in_file,quote=F,col.names=F,row.names=F);
-            write.table(r_out,ld,quote=F,col.names=F,row.names=F))
+            write.table(r_out,ld_out_file,quote=F,col.names=F,row.names=F))
   tag: "full"
   dataset: Shell{head -150 ${data_file}}
   subset: NULL
