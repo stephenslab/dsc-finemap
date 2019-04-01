@@ -9,8 +9,8 @@
 full_data: sim_utils.R + R(data =readRDS(dataset);
             in_sample = sample(1:nrow(data$X), ceiling(nrow(data$X)/2));
             X.all = data$X[,get_center(subset, ncol(data$X))];
-            X = center_scale(X[in_sample,]);
-            X_out = center_scale(X[-in_sample,]);
+            X = center_scale(X.all[in_sample,]);
+            X_out = center_scale(X.all[-in_sample,]);
             r = cor(X);
             r_out = cor(X_out);
             write.table(r,ld_in_file,quote=F,col.names=F,row.names=F);
