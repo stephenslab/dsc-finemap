@@ -54,7 +54,7 @@ random_data: sim_utils.R + R(set.seed(seed);
 
 get_sumstats: regression.R + R(res = mm_regression(as.matrix(X), as.matrix(Y)))
   @CONF: R_libs = abind
-  X: $X_in
+  X: $X
   Y: $Y
   $sumstats: res
                                                    
