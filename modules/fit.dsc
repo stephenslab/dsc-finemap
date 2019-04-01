@@ -16,7 +16,7 @@ caviar: fit_caviar.R + \
                                             ld[[ld_method]], args, prefix=cache))
   @CONF: R_libs = (dplyr, magrittr)
   sumstats: $sumstats
-  ld: list(in_sample = $ld_in_file, out_sample = $ld_out_sample)
+  ld: $ld
   ld_method: "in_sample", "out_sample"
   args: "-g 0.001 -c 1", "-g 0.001 -c 2", "-g 0.001 -c 3"
   cache: file(CAVIAR)
@@ -41,7 +41,7 @@ dap: fit_dap.py + Python(posterior = dap_batch(X, Y, cache, args))
 dap_z: fit_dap.py + Python(posterior = dap_batch_z(sumstats['bhat']/sumstats['shat'],
                                                        ld[[ld_method]], cache, args))
   sumstats: $sumstats
-  ld: list(in_sample = $ld_in_file, out_sample = $ld_out_sample)
+  ld: $ld
   ld_method: "in_sample", "out_sample"
   args: "-ld_control 0.20 --all"
   cache: file(DAP)
@@ -89,7 +89,7 @@ susie_z: susie_z.R + \
   sumstats: $sumstats
   s_init: NA
   L: 5
-  ld: list(in_sample = $ld_in_file, out_sample = $ld_out_sample)
+  ld: $ld
   ld_method: "in_sample", "out_sample"
   estimate_residual_variance: TRUE
   $fitted: res$fitted
@@ -110,7 +110,7 @@ susie_bhat: susie_bhat.R + \
   s_init: NA
   n: $N_in
   L: 5
-  ld: list(in_sample = $ld_in_file, out_sample = $ld_out_sample)
+  ld: $ld
   ld_method: "in_sample", "out_sample"
   estimate_residual_variance: TRUE
   $fitted: res$fitted
