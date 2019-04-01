@@ -26,7 +26,7 @@ finemap(caviar): fit_finemap.R + \
              R(posterior = finemap_mvar(sumstats$bhat / sumstats$shat,
                                         ld[[ld_method]], N, k,
                                         args, prefix=cache))
-  N: $N
+  N: $N_in
   k: NULL
   args: "--n-causal-max 5"
   cache: file(FM)

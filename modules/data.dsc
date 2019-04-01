@@ -21,7 +21,8 @@ full_data: sim_utils.R + R(data =readRDS(dataset);
   $X: X
   $X_out: X_out
   $Y: data$Y
-  $N_in: nrow(X_in)
+  $N_in: nrow(X)
+  $N_out: nrow(X_out)
   $meta: data$meta
   $ld: list(in_sample = file(ld_in), out_sample = file(ld_out))
         
