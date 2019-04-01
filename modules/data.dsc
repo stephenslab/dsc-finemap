@@ -13,8 +13,8 @@ full_data: sim_utils.R + R(data =readRDS(dataset);
             X_out = center_scale(X.all[-in_sample,]);
             r = cor(X);
             r_out = cor(X_out);
-            write.table(r,ld[['in_smaple']],quote=F,col.names=F,row.names=F);
-            write.table(r_out,ld[['out_sample']],quote=F,col.names=F,row.names=F))
+            write.table(r,ld_in_file,quote=F,col.names=F,row.names=F);
+            write.table(r_out,ld_out_file,quote=F,col.names=F,row.names=F))
   tag: "full"
   dataset: Shell{head -150 ${data_file}}
   subset: NULL
@@ -24,6 +24,8 @@ full_data: sim_utils.R + R(data =readRDS(dataset);
   $N_in: nrow(X)
   $N_out: nrow(X_out)
   $meta: data$meta
+  $ld_in_file: file(ld_in)
+  $ld_out_file: file(ld_out)
   $ld: list(in_sample = file(ld_in), out_sample = file(ld_out))
         
 lite_data(full_data):
