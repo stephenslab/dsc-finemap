@@ -38,7 +38,7 @@ dap: fit_dap.py + Python(posterior = dap_batch(X, Y, cache, args))
   cache: file(DAP)
   $posterior: posterior
 
-dap_z: fit_dap.py + R(ld_file = ld[[ld_method]]) + Python(posterior = dap_batch_z(sumstats['bhat']/sumstats['shat'], ld_file, cache, args))
+dap_z: fit_dap.py + Python(posterior = dap_batch_z(sumstats['bhat']/sumstats['shat'], ld[ld_method], cache, args))
   sumstats: $sumstats
   ld: $ld
   ld_method: "in_sample", "out_sample"
