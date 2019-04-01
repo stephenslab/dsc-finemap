@@ -18,8 +18,8 @@ full_data: sim_utils.R + R(data =readRDS(dataset);
   tag: "full"
   dataset: Shell{head -150 ${data_file}}
   subset: NULL
-  ld_in_file: file(ld_in)
-  ld_out_file: file(ld_out)
+  ld_in_file: file(in.ld)
+  ld_out_file: file(out.ld)
   $X: X
   $X_out: X_out
   $Y: data$Y
