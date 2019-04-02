@@ -53,8 +53,8 @@ sim_gaussian: simulate.R + \
                 R(res=sim_gaussian_multiple(X, pve, n_signal, effect_weight))
   @CONF: R_libs = susieR
   X: $X
-  pve: 0.05, 0.1, 0.2, 0.6, 0.8
-  n_signal: 1, 3, 5, 10
+  pve: 0.05, 0.2, 0.6, 0.8
+  n_signal: 1, 3, 5
   effect_weight: rep(1/n_signal, n_signal), c(rep(0.15/(n_signal-1), n_signal-1), 0.85)
   $Y: res$Y
   $meta: res$meta

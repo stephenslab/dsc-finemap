@@ -17,7 +17,7 @@ susie_bhat_multiple = function(Bhat,Shat,ld_file, n, L, s_init, estimate_residua
     if (is.na(s_init))
       fitted[[r]] = susie_bhat_analyze(Bhat[,r],Shat[,r], R, n[r], L=L, list(), estimate_residual_variance)
     else
-      fitted[[r]] = susie_bhat_analyze(Bhat[,r],Shat[,r], R, n[r], L, s_init[[r]], estimate_residual_variance)
+      fitted[[r]] = susie_bhat_analyze(Bhat[,r],Shat[,r], R, n[r], L=L, s_init[[r]], estimate_residual_variance)
     if(is.null(fitted[[r]]$sets))
       posterior[[r]] = NULL
     else
