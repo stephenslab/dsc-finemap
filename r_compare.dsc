@@ -13,11 +13,15 @@ DSC:
   run:
     default: data * sim_gaussian * get_sumstats * ((susie_bhat,susie_z, susie_oracle) * (score_susie, plot_susie), dap_z * (score_dap, plot_dap), finemap * (score_finemap, plot_finemap))
     null: data * sim_gaussian_null * get_sumstats * ((susie_z, susie_oracle) * (score_susie, plot_susie), dap_z*(score_dap, plot_dap), finemap * (score_finemap, plot_finemap))
-    susie: data * simulate * get_sumstats * ((susie_bhat, susie_z, susie_oracle) * (score_susie, plot_susie))
-    finemap: data * simulate * get_sumstats * (finemap * (score_finemap, plot_finemap))
-    dap: data * simulate * get_sumstats * (dap_z * score_dap)
+    susiez: data * sim_gaussian * get_sumstats * (susie_z * (score_susie, plot_susie))
+    susieb: data * sim_gaussian * get_sumstats * (susie_bhat * (score_susie, plot_susie))
+    susie_null: data * sim_gaussian_null * get_sumstats * ((susie_bhat, susie_z) * (score_susie, plot_susie))
+    finemap: data * sim_gaussian * get_sumstats * (finemap * (score_finemap, plot_finemap))
+    finemap_null: data * sim_gaussian_null * get_sumstats * (finemap * (score_finemap, plot_finemap))
+    dap: data * sim_gaussian * get_sumstats * (dap_z * score_dap)
+    dap_null: data * sim_gaussian_null * get_sumstats * (dap_z * score_dap)
   exec_path: code
   global:
-    data_file: data/gtex-manifest-full.txt
-  output: output/r_compare_full_data_signal
+    data_file: data/gtex-manifest.txt
+  output: output/r_compare_data_signal
 
