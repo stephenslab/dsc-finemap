@@ -11,8 +11,8 @@ full_data: sim_utils.R + R(data =readRDS(dataset);
             X.all = data$X[,get_center(subset, ncol(data$X))];
             X = center_scale(X.all[in_sample,]);
             X_out = center_scale(X.all[-in_sample,]);
-            r = cor(X);
-            r_out = cor(X_out);
+            r = crossprod(X)/(nrow(X)-1);
+            r_out = crossprod(X_out)/(nrow(X_out)-1);
             write.table(r,ld_in_file,quote=F,col.names=F,row.names=F);
             write.table(r_out,ld_out_file,quote=F,col.names=F,row.names=F))
   tag: "full"
