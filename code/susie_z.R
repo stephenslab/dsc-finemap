@@ -2,7 +2,7 @@ library(susieR)
 library(data.table)
 
 susie_z_analyze = function(z, R, L, s_init, estimate_residual_variance) {
-  fit = tryCatch(susie_z(z, R, L=L, s_init=s_init, estimate_residual_variance = estimate_residual_variance, max_iter = 1000), 
+  fit = tryCatch(susie_rss(z, R, L=L, s_init=s_init, estimate_residual_variance = estimate_residual_variance, max_iter = 1000), 
                  error = function(e) list(sets = NULL, pip=NULL))
   return(fit)
 }
