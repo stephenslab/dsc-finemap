@@ -11,9 +11,9 @@ full_data: sim_utils.R + R(data =readRDS(dataset);
             X.all = data$X[,get_center(subset, ncol(data$X))];
             X = center_scale(X.all[in_sample,]);
             X_out = center_scale(X.all[-in_sample,]);
-            r = susieR:::muffled_corr(X);
+            r = cor(X);
             r[is.na(r)] = 0;
-            r_out = susieR:::muffled_corr(X_out);
+            r_out = cor(X_out);
             r_out[is.na(r_out)] = 0;
             write.table(r,ld_in_file,quote=F,col.names=F,row.names=F);
             write.table(r_out,ld_out_file,quote=F,col.names=F,row.names=F))
