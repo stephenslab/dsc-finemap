@@ -9,11 +9,6 @@ susie_z_analyze = function(z, R, L, s_init, estimate_residual_variance) {
 
 susie_z_multiple = function(Z, ld_file, L, s_init, estimate_residual_variance) {
   R = as.matrix(fread(ld_file))
-  isnaR = is.na(R)
-  naind = which(rowSums(isnaR) == ncol(R)-1)
-  R[,naind] = 0
-  R[naind,] = 0
-  R[isnaR] = 0
   
   fitted = list()
   posterior = list()

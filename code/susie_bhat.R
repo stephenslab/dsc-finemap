@@ -9,11 +9,6 @@ susie_bhat_analyze = function(bhat, shat, R, n, L, s_init, estimate_residual_var
 
 susie_bhat_multiple = function(Bhat,Shat,ld_file, n, L, s_init, estimate_residual_variance) {
   R = as.matrix(fread(ld_file))
-  isnaR = is.na(R)
-  naind = which(rowSums(isnaR) == ncol(R)-1)
-  R[,naind] = 0
-  R[naind,] = 0
-  R[isnaR] = 0
   
   fitted = list()
   posterior = list()
