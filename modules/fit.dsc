@@ -41,8 +41,8 @@ dap: fit_dap.py + Python(posterior = dap_batch(X, Y, cache, args))
   $posterior: posterior
 
 dap_z: fit_dap.py + Python(z = sumstats['bhat']/sumstats['shat'];
-                           z[is.na(z)] = 0;
-                           posterior = dap_batch_z(sumstats['bhat']/sumstats['shat'], ld[ld_method], cache, args))
+                           numpy.nan_to_num(z, copy=False);
+                           posterior = dap_batch_z(z, ld[ld_method], cache, args))
   sumstats: $sumstats
   ld: $ld
   ld_method: "in_sample", "out_sample"
