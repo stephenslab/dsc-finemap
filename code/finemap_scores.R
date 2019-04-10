@@ -25,6 +25,7 @@ finemap_scores = function(cs, pip, true_coef) {
 finemap_scores_multiple = function(res, truth) {
   total = valid = size = 0
   signal_pip = list()
+  pip = list()
   for (r in 1:length(res)) {
     set = res[[r]]$set
     snps = res[[r]]$snp
@@ -42,6 +43,7 @@ finemap_scores_multiple = function(res, truth) {
     valid = valid + out$valid
     size = size + out$size
     signal_pip[[r]] = out$signal_pip
+    pip[[r]] = snps$snp_prob
   }
-  return(list(total=total, valid=valid, size=size, signal_pip = unlist(signal_pip)))
+  return(list(total=total, valid=valid, size=size, signal_pip = unlist(signal_pip), pip = unlist(pip)))
 }

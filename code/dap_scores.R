@@ -67,6 +67,7 @@ dap_scores = function(sets, pip, true_coef) {
 dap_scores_multiple = function(res, truth) {
   total = valid = size = avgr2 = top = overlap = 0
   signal_pip = list()
+  pip = list()
   for (r in 1:length(res)) {
     set = res[[r]]$set
     snps = res[[r]]$snp
@@ -80,6 +81,8 @@ dap_scores_multiple = function(res, truth) {
     top = top + out$top
     overlap = overlap + out$has_overlap
     signal_pip[[r]] = out$signal_pip
+    pip[[r]] = snps$snp_prob
   }
-  return(list(total=total, valid=valid, size=size, avgr2=avgr2, top=top, overlap=overlap, signal_pip = unlist(signal_pip)))
+  return(list(total=total, valid=valid, size=size, avgr2=avgr2, top=top, overlap=overlap, 
+              signal_pip = unlist(signal_pip), pip = unlist(pip)))
 }
