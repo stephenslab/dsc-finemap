@@ -1,4 +1,3 @@
-"~/Documents/GTExV8/Thyroid.Lung.FMO2.filled.rds"
 "~/Documents/GTExV8/Toys/Thyroid.ENSG00000031823.RDS"
 "~/Documents/GTExV8/Toys/Thyroid.ENSG00000062194.RDS"
 "~/Documents/GTExV8/Toys/Thyroid.ENSG00000073150.RDS"
