@@ -33,7 +33,7 @@ DSC:
     based_on: midway2
     address: localhost
   stephenslab:
-    based_on: midway2
+    based_on: midway2_head
     max_cores: 28
     max_mem: 128G
     max_walltime: "10d"
@@ -42,13 +42,24 @@ DSC:
 
 default:
   queue: midway2_head
-  time_per_instance: 30m
-  instances_per_job: 10
+  time_per_instance: 2m
+  instances_per_job: 20
   n_cpu: 1
   mem_per_cpu: 3G
+
+susie_z:
+  time_per_instance: 61m
+  instances_per_job: 5
+
+susie_bhat:
+  time_per_instance: 61m
+  instances_per_job: 5
+
+finemap:
+  time_per_instance: 61m
+  instances_per_job: 5
 
 dap_z:
   time_per_instance: 61m
   instances_per_job: 5
   mem_per_cpu: 6G
-
