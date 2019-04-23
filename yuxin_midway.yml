@@ -47,7 +47,11 @@ default:
   n_cpu: 1
   mem_per_cpu: 3G
 
-susie_z:
+susie_rss:
+  time_per_instance: 61m
+  instances_per_job: 5
+
+susie_rss_add_z:
   time_per_instance: 61m
   instances_per_job: 5
 
@@ -55,7 +59,15 @@ susie_bhat:
   time_per_instance: 61m
   instances_per_job: 5
 
+susie_bhat_add_z:
+  time_per_instance: 61m
+  instances_per_job: 5
+
 finemap:
+  time_per_instance: 61m
+  instances_per_job: 5
+
+finemap_add_z:
   time_per_instance: 61m
   instances_per_job: 5
 
