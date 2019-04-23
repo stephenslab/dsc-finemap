@@ -15,7 +15,7 @@ full_data: sim_utils.R + R(data = readRDS(dataset);
 
             in.index = apply(X.in, 2, var, na.rm=TRUE) != 0;
             out.index = apply(X.out, 2, var, na.rm=TRUE) != 0;
-            choose.index = as.logical(in.index*out.index)
+            choose.index = as.logical(in.index*out.index);
             X.all = X.all[, choose.index];
             X.in = X.in[, choose.index];
             X.out = X.out[, choose.index];
