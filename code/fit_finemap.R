@@ -87,10 +87,12 @@ if(add_z){
   r = as.matrix(fread(ld[[ld_method]]));
   if(ld_method == 'out_sample'){
     r = cov2cor(r*(N_out-1) + tcrossprod(z));
+    r = (r + t(r))/2;
     write.table(r,ld_out_z_file,quote=F,col.names=F,row.names=F);
     ld_file = ld_out_z_file;
   } else if(ld_method == 'all'){
     r = cov2cor(r*(N_all-1) + tcrossprod(z));
+    r = (r + t(r))/2;
     write.table(r,ld_all_z_file,quote=F,col.names=F,row.names=F);
     ld_file = ld_all_z_file;
   }
