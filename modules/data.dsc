@@ -6,34 +6,44 @@
 # $data: full data
 # $sumstats: summary statistics
 
-full_data: sim_utils.R + R(data =readRDS(dataset);
+full_data: sim_utils.R + R(data = readRDS(dataset);
             in_sample = 1:ceiling(nrow(data$X)/2);
             X.all = data$X[,get_center(subset, ncol(data$X))];
-            X = center_scale(X.all[in_sample,]);
-            X_out = center_scale(X.all[-in_sample,]);
-            r = cor(X);
-            r[is.na(r)] = 0;
-            r_out = cor(X_out);
-            r_out[is.na(r_out)] = 0;
-            write.table(r,ld_in_file,quote=F,col.names=F,row.names=F);
-            write.table(r_out,ld_out_file,quote=F,col.names=F,row.names=F))
+            X.in = center_scale(X.all[in_sample,]);
+            X.out = center_scale(X.all[-in_sample,]);
+            X.all = center_scale(X.all);
+
+            in.index = apply(X.in, 2, var, na.rm=TRUE) != 0;
+            X.all = X.all[, in.index];
+            X.in = X.in[, in.index];
+            X.out = X.out[, in.index];
+
+            r.all = cor(X.all);
+            r.in = cor(X.in);
+            r.out = cor(X.out);
+            write.table(r.all,ld_all_file,quote=F,col.names=F,row.names=F);
+            write.table(r.in,ld_in_file,quote=F,col.names=F,row.names=F);
+            write.table(r.out,ld_out_file,quote=F,col.names=F,row.names=F))
   tag: "full"
   dataset: Shell{head -150 ${data_file}}
   subset: NULL
+  ld_all_file: file(all.ld)
   ld_in_file: file(in.ld)
   ld_out_file: file(out.ld)
-  $X: X
-  $X_out: X_out
+  $X_all: X.all
+  $X_in: X.in
+  $X_out: X.out
   $Y: data$Y
-  $N_in: nrow(X)
-  $N_out: nrow(X_out)
+  $N_all: nrow(X.all)
+  $N_in: nrow(X.in)
+  $N_out: nrow(X.out)
   $meta: data$meta
-  $ld: list(in_sample=ld_in_file, out_sample=ld_out_file)
-        
+  $ld: list(all = ld_all_file, in_sample=ld_in_file, out_sample=ld_out_file)
+
 lite_data(full_data):
   tag: "2k"
   subset: 2000
-             
+
 small_data(full_data):
   tag: "1k"
   subset: 1000
@@ -59,10 +69,10 @@ random_data: sim_utils.R + R(set.seed(seed);
 
 get_sumstats: regression.R + R(res = mm_regression(as.matrix(X), as.matrix(Y)))
   @CONF: R_libs = abind
-  X: $X
+  X: $X_in
   Y: $Y
   $sumstats: res
-                                                   
+
 summarize_ld: lib_regression_simulator.py + \
                 regression_simulator.py + \
                 Python(res = summarize_LD(X, ld_file, ld_plot))

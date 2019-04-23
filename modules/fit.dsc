@@ -17,21 +17,42 @@ caviar: fit_caviar.R + \
   @CONF: R_libs = (dplyr, magrittr)
   sumstats: $sumstats
   ld: $ld
-  ld_method: "in_sample", "out_sample"
+  ld_method: "all", "in_sample", "out_sample"
   args: "-g 0.001 -c 1", "-g 0.001 -c 2", "-g 0.001 -c 3"
   cache: file(CAVIAR)
   $posterior: posterior
 
 finemap(caviar): fit_finemap.R + \
              R(z = sumstats$bhat / sumstats$shat;
-               z[is.na(z)] = 0;
+               library(data.table);
+               if(add_z){
+                 r = as.matrix(fread(ld[[ld_method]]));
+                 if(ld_method == 'out_sample'){
+                    r = cov2cor(r*(N_out-1) + tcrossprod(z));
+                    write.table(r,ld_out_z_file,quote=F,col.names=F,row.names=F);
+                    ld_file = ld_out_z_file;
+                  } else if(ld_method == 'all'){
+                    r = cov2cor(r*(N_all-1) + tcrossprod(z));
+                    write.table(r,ld_all_z_file,quote=F,col.names=F,row.names=F);
+                    ld_file = ld_all_z_file;
+                  }
+               } else { ld_file = ld[[ld_method]] }
                posterior = finemap_mvar(z,
-                                        ld[[ld_method]], N, k,
+                                        ld_file, N, k,
                                         args, prefix=cache))
   N: $N_in
+  N_out: $N_out
+  N_all: $N_all
+  add_z: FALSE
   k: NULL
   args: "--n-causal-max 5"
+  ld_all_z_file: file(all.z.ld)
+  ld_out_z_file: file(out.z.ld)
   cache: file(FM)
+
+finemap_add_z(finemap):
+  add_z: TRUE
+  ld_method: "all", "out_sample"
 
 dap: fit_dap.py + Python(posterior = dap_batch(X, Y, cache, args))
   X: $X
@@ -45,7 +66,7 @@ dap_z: fit_dap.py + Python(z = sumstats['bhat']/sumstats['shat'];
                            posterior = dap_batch_z(z, ld[ld_method], cache, args))
   sumstats: $sumstats
   ld: $ld
-  ld_method: "in_sample", "out_sample"
+  ld_method: "all", "in_sample", "out_sample"
   args: "-ld_control 0.20 --all"
   cache: file(DAP)
   $posterior: posterior
@@ -54,10 +75,10 @@ susie: fit_susie.R
   # Prior variance of nonzero effects.
   @CONF: R_libs = susieR
   maxI: 200
-  maxL: 10
-  null_weight: 0, 0.5, 0.9, 0.95
-  prior_var: 0, 0.1, 0.4
-  X: $X
+  maxL: 1, 5
+  null_weight: 0
+  prior_var: 0
+  X: $X_in
   Y: $Y
   $posterior: posterior
   $fitted: fitted
@@ -85,41 +106,71 @@ init_oracle: initialize.R + R(s_init=init_susie($(meta)$true_coef))
   @CONF: R_libs = susieR
   $s_init: s_init
 
-susie_z: susie_z.R + \
-              R(z = sumstats$bhat/sumstats$shat;
-                z[is.na(z)] = 0;
-                res = susie_z_multiple(z,
-                ld[[ld_method]], L, s_init, estimate_residual_variance))
+susie_rss: susie_rss.R + \
+                       R(library(data.table);
+                         z = sumstats$bhat/sumstats$shat;
+                         r = as.matrix(fread(ld[[ld_method]]));
+                         if(add_z){
+                           if(ld_method == 'out_sample'){
+                             r = cov2cor(r*(N_out-1) + tcrossprod(z));
+                           } else if(ld_method == 'all'){
+                             r = cov2cor(r*(N_all-1) + tcrossprod(z));
+                           }
+                         }
+                         res = susie_rss_multiple(z, r, L, s_init, estimate_residual_variance))
   @CONF: R_libs = (susieR, data.table)
   sumstats: $sumstats
   s_init: NA
-  L: 5
+  L: 1, 5
   ld: $ld
-  ld_method: "in_sample", "out_sample"
+  ld_method: "all", "in_sample", "out_sample"
   estimate_residual_variance: TRUE
+  add_z: FALSE
+  N_all: $N_all
+  N_out: $N_out
   $fitted: res$fitted
   $posterior: res$posterior
 
-susie_z_large(susie_z):
+susie_rss_add_z(susie_rss):
+  add_z: TRUE
+  ld_method: "all", "out_sample"
+
+susie_rss_large(susie_rss):
   L: 201
 
-susie_z_init(susie_z):
+susie_rss_init(susie_rss):
   s_init: $s_init
   L: 10
 
 susie_bhat: susie_bhat.R + \
-              R(res = susie_bhat_multiple(sumstats$bhat, sumstats$shat,
-                ld[[ld_method]], n, L, s_init, estimate_residual_variance))
+              R(library(data.table);
+                z = sumstats$bhat/sumstats$shat;
+                r = as.matrix(fread(ld[[ld_method]]));
+                if(add_z){
+                  if(ld_method == 'out_sample'){
+                    r = cov2cor(r*(N_out-1) + tcrossprod(z));
+                  } else if(ld_method == 'all'){
+                    r = cov2cor(r*(N_all-1) + tcrossprod(z));
+                  }
+                }
+                res = susie_bhat_multiple(sumstats$bhat, sumstats$shat, r, n, L, s_init, estimate_residual_variance))
   @CONF: R_libs = (susieR, data.table)
   sumstats: $sumstats
   s_init: NA
   n: $N_in
-  L: 5
+  L: 1, 5
   ld: $ld
-  ld_method: "in_sample", "out_sample"
+  ld_method: "all", "in_sample", "out_sample"
   estimate_residual_variance: TRUE
+  add_z: FALSE
+  N_all: $N_all
+  N_out: $N_out
   $fitted: res$fitted
   $posterior: res$posterior
+
+susie_bhat_add_z(susie_bhat):
+  add_z: TRUE
+  ld_method: "all", "out_sample"
 
 susie_bhat_large(susie_bhat):
   L: 201

@@ -2,14 +2,12 @@ library(susieR)
 library(data.table)
 
 susie_bhat_analyze = function(bhat, shat, R, n, L, s_init, estimate_residual_variance) {
-  fit = tryCatch(susie_bhat(bhat, shat, R, n=n, L=L, s_init=s_init, estimate_residual_variance = estimate_residual_variance, max_iter = 1000), 
+  fit = tryCatch(susie_bhat(bhat, shat, R, n=n, L=L, s_init=s_init, estimate_residual_variance = estimate_residual_variance, max_iter = 1000),
                  error = function(e) list(sets = NULL, pip=NULL))
   return(fit)
 }
 
-susie_bhat_multiple = function(Bhat,Shat,ld_file, n, L, s_init, estimate_residual_variance) {
-  R = as.matrix(fread(ld_file))
-  
+susie_bhat_multiple = function(Bhat,Shat,R, n, L, s_init, estimate_residual_variance) {
   fitted = list()
   posterior = list()
   if (is.null(dim(Bhat))) Bhat = matrix(ncol=1, Bhat)
