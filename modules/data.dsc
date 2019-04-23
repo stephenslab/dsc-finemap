@@ -14,9 +14,11 @@ full_data: sim_utils.R + R(data = readRDS(dataset);
             X.all = center_scale(X.all);
 
             in.index = apply(X.in, 2, var, na.rm=TRUE) != 0;
-            X.all = X.all[, in.index];
-            X.in = X.in[, in.index];
-            X.out = X.out[, in.index];
+            out.index = apply(X.out, 2, var, na.rm=TRUE) != 0;
+            choose.index = as.logical(in.index*out.index)
+            X.all = X.all[, choose.index];
+            X.in = X.in[, choose.index];
+            X.out = X.out[, choose.index];
 
             r.all = cor(X.all);
             r.in = cor(X.in);
