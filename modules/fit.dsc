@@ -22,24 +22,7 @@ caviar: fit_caviar.R + \
   cache: file(CAVIAR)
   $posterior: posterior
 
-finemap(caviar): fit_finemap.R + \
-             R(z = sumstats$bhat / sumstats$shat;
-               library(data.table);
-               if(add_z){
-                 r = as.matrix(fread(ld[[ld_method]]));
-                 if(ld_method == 'out_sample'){
-                    r = cov2cor(r*(N_out-1) + tcrossprod(z));
-                    write.table(r,ld_out_z_file,quote=F,col.names=F,row.names=F);
-                    ld_file = ld_out_z_file;
-                  } else if(ld_method == 'all'){
-                    r = cov2cor(r*(N_all-1) + tcrossprod(z));
-                    write.table(r,ld_all_z_file,quote=F,col.names=F,row.names=F);
-                    ld_file = ld_all_z_file;
-                  }
-               } else { ld_file = ld[[ld_method]] }
-               posterior = finemap_mvar(z,
-                                        ld_file, N, k,
-                                        args, prefix=cache))
+finemap(caviar): fit_finemap.R
   N: $N_in
   N_out: $N_out
   N_all: $N_all
@@ -106,18 +89,7 @@ init_oracle: initialize.R + R(s_init=init_susie($(meta)$true_coef))
   @CONF: R_libs = susieR
   $s_init: s_init
 
-susie_rss: susie_rss.R + \
-                       R(library(data.table);
-                         z = sumstats$bhat/sumstats$shat;
-                         r = as.matrix(fread(ld[[ld_method]]));
-                         if(add_z){
-                           if(ld_method == 'out_sample'){
-                             r = cov2cor(r*(N_out-1) + tcrossprod(z));
-                           } else if(ld_method == 'all'){
-                             r = cov2cor(r*(N_all-1) + tcrossprod(z));
-                           }
-                         }
-                         res = susie_rss_multiple(z, r, L, s_init, estimate_residual_variance))
+susie_rss: susie_rss.R + fit_susie_rss.R
   @CONF: R_libs = (susieR, data.table)
   sumstats: $sumstats
   s_init: NA
@@ -142,18 +114,7 @@ susie_rss_init(susie_rss):
   s_init: $s_init
   L: 10
 
-susie_bhat: susie_bhat.R + \
-              R(library(data.table);
-                z = sumstats$bhat/sumstats$shat;
-                r = as.matrix(fread(ld[[ld_method]]));
-                if(add_z){
-                  if(ld_method == 'out_sample'){
-                    r = cov2cor(r*(N_out-1) + tcrossprod(z));
-                  } else if(ld_method == 'all'){
-                    r = cov2cor(r*(N_all-1) + tcrossprod(z));
-                  }
-                }
-                res = susie_bhat_multiple(sumstats$bhat, sumstats$shat, r, n, L, s_init, estimate_residual_variance))
+susie_bhat: susie_bhat.R + fit_susie_bhat.R
   @CONF: R_libs = (susieR, data.table)
   sumstats: $sumstats
   s_init: NA
