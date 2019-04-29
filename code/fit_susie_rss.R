@@ -6,4 +6,4 @@ if (add_z) {
     r = cov2cor(r*(N_out-1) + tcrossprod(z));
   }
 }
-res = susie_rss_multiple(z, r, L, lambda, s_init, estimate_residual_variance)
+res = susie_rss_multiple(z, r, L, lamb, s_init, estimate_residual_variance)
