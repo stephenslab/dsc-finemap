@@ -7,40 +7,34 @@
 # $sumstats: summary statistics
 
 full_data: sim_utils.R + R(data = readRDS(dataset);
-            in_sample = 1:ceiling(nrow(data$X)/2);
+            n = nrow(data$X);
+            in_sample = sample(1:n, ceiling(n/2));
             X.all = data$X[,get_center(subset, ncol(data$X))];
             X.in = center_scale(X.all[in_sample,]);
             X.out = center_scale(X.all[-in_sample,]);
-            X.all = center_scale(X.all);
 
             in.index = apply(X.in, 2, var, na.rm=TRUE) != 0;
             out.index = apply(X.out, 2, var, na.rm=TRUE) != 0;
             choose.index = as.logical(in.index*out.index);
-            X.all = X.all[, choose.index];
             X.in = X.in[, choose.index];
             X.out = X.out[, choose.index];
 
-            r.all = cor(X.all);
             r.in = cor(X.in);
             r.out = cor(X.out);
-            write.table(r.all,ld_all_file,quote=F,col.names=F,row.names=F);
             write.table(r.in,ld_in_file,quote=F,col.names=F,row.names=F);
             write.table(r.out,ld_out_file,quote=F,col.names=F,row.names=F))
   tag: "full"
   dataset: Shell{head -150 ${data_file}}
   subset: NULL
-  ld_all_file: file(all.ld)
   ld_in_file: file(in.ld)
   ld_out_file: file(out.ld)
-  $X_all: X.all
   $X_in: X.in
   $X_out: X.out
   $Y: data$Y
-  $N_all: nrow(X.all)
   $N_in: nrow(X.in)
   $N_out: nrow(X.out)
   $meta: data$meta
-  $ld: list(all = ld_all_file, in_sample=ld_in_file, out_sample=ld_out_file)
+  $ld: list(in_sample=ld_in_file, out_sample=ld_out_file)
 
 lite_data(full_data):
   tag: "2k"
