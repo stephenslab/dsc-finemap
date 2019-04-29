@@ -90,11 +90,6 @@ if(add_z){
     r = (r + t(r))/2;
     write.table(r,ld_out_z_file,quote=F,col.names=F,row.names=F);
     ld_file = ld_out_z_file;
-  } else if(ld_method == 'all'){
-    r = cov2cor(r*(N_all-1) + tcrossprod(z));
-    r = (r + t(r))/2;
-    write.table(r,ld_all_z_file,quote=F,col.names=F,row.names=F);
-    ld_file = ld_all_z_file;
   }
 } else { ld_file = ld[[ld_method]] }
 posterior = finemap_mvar(z,
