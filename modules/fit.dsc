@@ -18,16 +18,22 @@ caviar: fit_caviar.R + \
   sumstats: $sumstats
   ld: $ld
   ld_method: "in_sample", "out_sample"
-  args: "-g 0.001 -c 1", "-g 0.001 -c 2", "-g 0.001 -c 3"
+  args: "-g 0.001 -c 2"
+  add_z: FALSE, TRUE
   cache: file(CAVIAR)
   $posterior: posterior
 
-finemap(caviar): fit_finemap.R
+caviar_add_z(caviar):
+  ld_method: "out_sample"
+  add_z: TRUE
+  
+finemap(caviar): fit_finemap_v3.R
   N: $N_in
   N_out: $N_out
-  add_z: FALSE
+  maf: $maf_in
+  add_z: FALSE, TRUE
   k: NULL
-  args: "--n-causal-max 5"
+  args: "n-causal-snps 5"
   ld_out_z_file: file(out.z.ld)
   cache: file(FM)
 
@@ -91,12 +97,12 @@ susie_rss: susie_rss.R + fit_susie_rss.R
   @CONF: R_libs = (susieR, data.table)
   sumstats: $sumstats
   s_init: NA
-  L: 5
+  L: 1, 2, 5
   ld: $ld
   ld_method: "in_sample", "out_sample"
-  lamb: 0, 1e-6
+  lamb: 0, 1e-4, 0.1, 1
   estimate_residual_variance: TRUE, FALSE
-  add_z: FALSE
+  add_z: FALSE, TRUE
   N_out: $N_out
   $fitted: res$fitted
   $posterior: res$posterior
@@ -117,11 +123,11 @@ susie_bhat: susie_bhat.R + fit_susie_bhat.R
   sumstats: $sumstats
   s_init: NA
   n: $N_in
-  L: 5
+  L: 1, 2, 5
   ld: $ld
   ld_method: "in_sample", "out_sample"
   estimate_residual_variance: TRUE, FALSE
-  add_z: FALSE
+  add_z: FALSE, TRUE
   N_out: $N_out
   $fitted: res$fitted
   $posterior: res$posterior
