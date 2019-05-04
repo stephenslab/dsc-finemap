@@ -10,14 +10,19 @@ full_data: sim_utils.R + R(data = readRDS(dataset);
             n = nrow(data$X);
             in_sample = sample(1:n, ceiling(n/2));
             X.all = data$X[,get_center(subset, ncol(data$X))];
-            X.in = center_scale(X.all[in_sample,]);
-            X.out = center_scale(X.all[-in_sample,]);
-
+            X.in = X.all[in_sample,];
+            X.out = X.all[-in_sample,];
+            
             in.index = apply(X.in, 2, var, na.rm=TRUE) != 0;
             out.index = apply(X.out, 2, var, na.rm=TRUE) != 0;
             choose.index = as.logical(in.index*out.index);
             X.in = X.in[, choose.index];
             X.out = X.out[, choose.index];
+            
+            maf.in = apply(X.in, 2, function(x) sum(x)/(2*length(x)));
+            maf.out = apply(X.out, 2, function(x) sum(x)/(2*length(x)));
+            X.in = center_scale(X.in);
+            X.out = center_scale(X.out);
 
             r.in = cor(X.in);
             r.out = cor(X.out);
@@ -33,6 +38,8 @@ full_data: sim_utils.R + R(data = readRDS(dataset);
   $Y: data$Y
   $N_in: nrow(X.in)
   $N_out: nrow(X.out)
+  $maf_in: maf.in
+  $maf_out: maf.out
   $meta: data$meta
   $ld: list(in_sample=ld_in_file, out_sample=ld_out_file)
 
