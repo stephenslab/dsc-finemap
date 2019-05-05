@@ -11,15 +11,17 @@
 # $fitted: for diagnostics
 # $posterior: for inference
 
-caviar: fit_caviar.R + \
-             R(posterior = finemap_mcaviar(sumstats$bhat/sumstats$shat,
-                                            ld[[ld_method]], args, prefix=cache))
+caviar: fit_caviar.R
   @CONF: R_libs = (dplyr, magrittr)
   sumstats: $sumstats
   ld: $ld
   ld_method: "in_sample", "out_sample"
+  N_out: $N_out
+  N_in: $N_in
   args: "-g 0.001 -c 2"
   add_z: FALSE, TRUE
+  ld_out_z_file: file(out.z.ld)
+  ld_in_z_file: file(in.z.ld)
   cache: file(CAVIAR)
   $posterior: posterior
 
@@ -28,13 +30,9 @@ caviar_add_z(caviar):
   add_z: TRUE
   
 finemap(caviar): fit_finemap_v3.R
-  N: $N_in
-  N_out: $N_out
   maf: $maf_in
-  add_z: FALSE, TRUE
   k: NULL
   args: "n-causal-snps 5"
-  ld_out_z_file: file(out.z.ld)
   cache: file(FM)
 
 finemap_add_z(finemap):
@@ -104,6 +102,7 @@ susie_rss: susie_rss.R + fit_susie_rss.R
   estimate_residual_variance: TRUE, FALSE
   add_z: FALSE, TRUE
   N_out: $N_out
+  N_in: $N_in
   $fitted: res$fitted
   $posterior: res$posterior
 
@@ -129,6 +128,7 @@ susie_bhat: susie_bhat.R + fit_susie_bhat.R
   estimate_residual_variance: TRUE, FALSE
   add_z: FALSE, TRUE
   N_out: $N_out
+  N_in: $N_in
   $fitted: res$fitted
   $posterior: res$posterior
 

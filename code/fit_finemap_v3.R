@@ -111,7 +111,12 @@ if(add_z){
     r = (r + t(r))/2;
     write.table(r,ld_out_z_file,quote=F,col.names=F,row.names=F);
     ld_file = ld_out_z_file;
+  }else{
+    r = cov2cor(r*(N_in-1) + tcrossprod(z));
+    r = (r + t(r))/2;
+    write.table(r,ld_in_z_file,quote=F,col.names=F,row.names=F);
+    ld_file = ld_in_z_file;
   }
 } else { ld_file = ld[[ld_method]] }
 posterior = finemap_mvar_v1.3(sumstats$bhat, sumstats$shat, maf,
-                              ld_file, N, k, args, prefix=cache)
+                              ld_file, N_in, k, args, prefix=cache)
