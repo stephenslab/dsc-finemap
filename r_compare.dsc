@@ -11,7 +11,8 @@ DSC:
     simulate: sim_gaussian * get_sumstats
     method_susie: susie_bhat, susie_rss
   run:
-    default: data * simulate * ((method_susie * score_susie), (finemap * (score_finemap, plot_finemap)), (caviar * (score_caviar, plot_caviar)))
+    default: data * simulate * ((method_susie * score_susie), (finemap * score_finemap), (caviar * (score_caviar, plot_caviar)))
+    test: data * simulate * finemap
   exec_path: code
   global:
     data_file: data/gtex-manifest.txt
