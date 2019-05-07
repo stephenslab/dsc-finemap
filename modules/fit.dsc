@@ -15,7 +15,7 @@ caviar: fit_caviar.R
   @CONF: R_libs = (dplyr, magrittr)
   sumstats: $sumstats
   ld: $ld
-  ld_method: "in_sample", "out_sample"
+  ld_method: "out_sample"
   N_out: $N_out
   N_in: $N_in
   args: "-g 0.001 -c 2"
@@ -30,8 +30,10 @@ caviar_add_z(caviar):
   add_z: TRUE
   
 finemap(caviar): fit_finemap_v3.R
-  maf: $maf_in
+  maf: $maf
+  maf_method: 'maf_out'
   k: NULL
+  method: 'sss', 'cond'
   args: "n-causal-snps 5"
   cache: file(FM)
 

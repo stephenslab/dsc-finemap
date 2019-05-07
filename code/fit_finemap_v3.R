@@ -34,10 +34,15 @@ write_finemap_sumstats_v1.3 <- function(bhat, se, allele_freq, LD_file, n, k, pr
 ## FIXME: read the finemapr implementation for data sanity check.
 ## Can be useful as a general data sanity checker (in previous modules)
 
-run_finemap_v1.3 <- function(bhat, se, allele_freq, LD_file, n, k, args = "", prefix="data")
+run_finemap_v1.3 <- function(bhat, se, allele_freq, LD_file, n, k, method,args = "", prefix="data")
 {
   cfg = write_finemap_sumstats_v1.3(bhat, se, allele_freq, LD_file, n, k, prefix)
-  cmd = paste("finemap_v1.3.1 --sss --log", "--in-files", cfg$meta, args)
+  if(method == 'sss'){
+    cmd = paste("finemap_v1.3.1 --sss --log", "--in-files", cfg$meta, args)
+  }else{
+    cmd = paste("finemap_v1.3.1 --cond --log", "--in-files", cfg$meta, args)
+  }
+  
   dscrutils::run_cmd(cmd)
 
   # read output tables
@@ -83,7 +88,7 @@ finemap_extract_ncausal_v1.3 <- function(logfile)
   return(tab)
 }
 
-finemap_mvar_v1.3 <- function(bhat, se, allele_freq, LD_file, n, k, args, prefix, 
+finemap_mvar_v1.3 <- function(bhat, se, allele_freq, LD_file, n, k, method, args, prefix, 
                          parallel = TRUE) {
   if (is.null(dim(bhat))) {
       bhat = matrix(ncol=1,bhat)
@@ -92,7 +97,7 @@ finemap_mvar_v1.3 <- function(bhat, se, allele_freq, LD_file, n, k, args, prefix
       se = matrix(ncol=1,se)
   }
   single_core = function(r) 
-      run_finemap_v1.3(bhat[,r], se[,r], allele_freq, LD_file, n, k, args, 
+      run_finemap_v1.3(bhat[,r], se[,r], allele_freq, LD_file, n, k, method, args, 
                   paste0(prefix, '_condition_', r))
   if (parallel)
       return(parallel::mclapply(1:ncol(bhat), function(r) single_core(r),
@@ -118,5 +123,5 @@ if(add_z){
     ld_file = ld_in_z_file;
   }
 } else { ld_file = ld[[ld_method]] }
-posterior = finemap_mvar_v1.3(sumstats$bhat, sumstats$shat, maf,
-                              ld_file, N_in, k, args, prefix=cache)
+posterior = finemap_mvar_v1.3(sumstats$bhat, sumstats$shat, maf[[maf_method]],
+                              ld_file, N_in, k, method, args, prefix=cache)
