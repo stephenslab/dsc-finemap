@@ -63,7 +63,12 @@ run_finemap_v1.3 <- function(bhat, se, allele_freq, LD_file, n, k, method,args =
   cs = lapply(1:ncol(cred), function(i) cred[,i][!is.na(cred[,i])] )
   
   # extract number of causal
-  ncausal = finemap_extract_ncausal_v1.3(paste0(cfg$log, '_sss'))
+  if(method == 'sss'){
+    ncausal = finemap_extract_ncausal_v1.3(paste0(cfg$log, '_sss'))
+  }else{
+    ncausal = finemap_extract_ncausal_v1.3(paste0(cfg$log, '_cond'))
+  }
+  
   return(list(snp=snp, config=config, set=cs, ncausal=ncausal))
 }
 
