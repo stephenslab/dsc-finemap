@@ -51,7 +51,7 @@ finemap_scores_multiple = function(res, truth) {
 finemap_v1.3_scores = function(cs, pip, true_coef) {
   if (is.null(dim(true_coef))) beta_idx = which(true_coef!=0)
   else beta_idx = which(apply(true_coef, 1, sum) != 0)
-  
+
   if (is.null(cs)) {
     size = 0
     total = 0
@@ -79,14 +79,19 @@ finemap_v1.3_scores_multiple = function(res, truth) {
   for (r in 1:length(res)) {
     set = res[[r]]$set
     snps = res[[r]]$snp
-    snps = snps[order(as.numeric(snps$snp)),]
-    
-    out = finemap_v1.3_scores(set, snps$snp_prob, truth[,r])
+    if(is.null(set)){
+      out = list(total=NA, valid=NA, size=NA, signal_pip = NA)
+      pip[[r]] = NULL
+    }else{
+      snps = snps[order(as.numeric(snps$snp)),]
+
+      out = finemap_v1.3_scores(set, snps$snp_prob, truth[,r])
+      pip[[r]] = snps$snp_prob
+    }
     total = total + out$total
     valid = valid + out$valid
     size = size + out$size
     signal_pip[[r]] = out$signal_pip
-    pip[[r]] = snps$snp_prob
   }
   return(list(total=total, valid=valid, size=size, signal_pip = unlist(signal_pip), pip = unlist(pip)))
 }

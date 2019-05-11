@@ -11,7 +11,7 @@ write_finemap_sumstats_v1.3 <- function(bhat, se, allele_freq, LD_file, n, k, pr
   # get dataset.z
   J = length(bhat)
   # FIXME: using minor allele frequency does not make sense
-  z = cbind(1:J, rep(1,J), rep(1,J), rep('A',J), rep('C',J), 
+  z = cbind(1:J, rep(1,J), rep(1,J), rep('A',J), rep('C',J),
             pmin(allele_freq, 1-allele_freq), bhat, se)
   colnames(z) = c('rsid', 'chromosome', 'position', 'allele1', 'allele2',
                   'maf', 'beta', 'se')
@@ -42,8 +42,19 @@ run_finemap_v1.3 <- function(bhat, se, allele_freq, LD_file, n, k, method,args =
   }else{
     cmd = paste("finemap_v1.3.1 --cond --log", "--in-files", cfg$meta, args)
   }
-  
-  dscrutils::run_cmd(cmd)
+
+  fout = ""; ferr = ""
+  write("Running shell command:", stderr())
+  write(cmd, stderr())
+  out <- system2("/bin/bash", args = c("-c", shQuote(cmd)),
+                 stdout = fout, stderr = ferr, timeout = 5)
+  if (out == 124){
+    return(list(snp=NULL, config=NULL, set=NULL, ncausal=NULL))
+  }else if (out != 0 && fout != TRUE && ferr != TRUE){
+    stop(paste(strsplit(cmd, " +")[[1]][1], "command failed (returned a non-zero exit status)"))
+  }
+
+  # dscrutils::run_cmd(cmd)
 
   # read output tables
   snp = read.table(cfg$snp,header=TRUE,sep=" ")[, c("rsid", "prob", "log10bf")]
@@ -61,14 +72,14 @@ run_finemap_v1.3 <- function(bhat, se, allele_freq, LD_file, n, k, method,args =
   cred = read.table(cfg$cred,header = T, sep='')
   cred = cred[,grep('cred_set_',colnames(cred)), drop=FALSE]
   cs = lapply(1:ncol(cred), function(i) cred[,i][!is.na(cred[,i])] )
-  
+
   # extract number of causal
   if(method == 'sss'){
     ncausal = finemap_extract_ncausal_v1.3(paste0(cfg$log, '_sss'))
   }else{
     ncausal = finemap_extract_ncausal_v1.3(paste0(cfg$log, '_cond'))
   }
-  
+
   return(list(snp=snp, config=config, set=cs, ncausal=ncausal))
 }
 
@@ -78,7 +89,7 @@ rank_snp_v1.3 <- function(snp) {
         rank = seq(1, n()),
         snp_prob_cumsum = cumsum(snp_prob) / sum(snp_prob)) %>%
     select(rank, snp, snp_prob, snp_prob_cumsum, snp_log10bf)
-  return(snp)    
+  return(snp)
 }
 
 finemap_extract_ncausal_v1.3 <- function(logfile)
@@ -93,7 +104,7 @@ finemap_extract_ncausal_v1.3 <- function(logfile)
   return(tab)
 }
 
-finemap_mvar_v1.3 <- function(bhat, se, allele_freq, LD_file, n, k, method, args, prefix, 
+finemap_mvar_v1.3 <- function(bhat, se, allele_freq, LD_file, n, k, method, args, prefix,
                          parallel = TRUE) {
   if (is.null(dim(bhat))) {
       bhat = matrix(ncol=1,bhat)
@@ -101,8 +112,8 @@ finemap_mvar_v1.3 <- function(bhat, se, allele_freq, LD_file, n, k, method, args
   if (is.null(dim(se))) {
       se = matrix(ncol=1,se)
   }
-  single_core = function(r) 
-      run_finemap_v1.3(bhat[,r], se[,r], allele_freq, LD_file, n, k, method, args, 
+  single_core = function(r)
+      run_finemap_v1.3(bhat[,r], se[,r], allele_freq, LD_file, n, k, method, args,
                   paste0(prefix, '_condition_', r))
   if (parallel)
       return(parallel::mclapply(1:ncol(bhat), function(r) single_core(r),
