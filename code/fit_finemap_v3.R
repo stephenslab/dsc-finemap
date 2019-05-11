@@ -47,7 +47,7 @@ run_finemap_v1.3 <- function(bhat, se, allele_freq, LD_file, n, k, method,args =
   write("Running shell command:", stderr())
   write(cmd, stderr())
   out <- system2("/bin/bash", args = c("-c", shQuote(cmd)),
-                 stdout = fout, stderr = ferr, timeout = 5)
+                 stdout = fout, stderr = ferr, timeout = 900)
   if (out == 124){
     return(list(snp=NULL, config=NULL, set=NULL, ncausal=NULL))
   }else if (out != 0 && fout != TRUE && ferr != TRUE){
