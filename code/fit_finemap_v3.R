@@ -43,18 +43,10 @@ run_finemap_v1.3 <- function(bhat, se, allele_freq, LD_file, n, k, method,args =
     cmd = paste("finemap_v1.3.1 --cond --log", "--in-files", cfg$meta, args)
   }
 
-  fout = ""; ferr = ""
-  write("Running shell command:", stderr())
-  write(cmd, stderr())
-  out <- system2("/bin/bash", args = c("-c", shQuote(cmd)),
-                 stdout = fout, stderr = ferr, timeout = 900)
-  if (out == 124){
+  out <- dscrutils::run_cmd(cmd, timeout=900, quit_on_error=FALSE)
+  if (out != 0) {
     return(list(snp=NULL, config=NULL, set=NULL, ncausal=NULL))
-  }else if (out != 0 && fout != TRUE && ferr != TRUE){
-    stop(paste(strsplit(cmd, " +")[[1]][1], "command failed (returned a non-zero exit status)"))
   }
-
-  # dscrutils::run_cmd(cmd)
 
   # read output tables
   snp = read.table(cfg$snp,header=TRUE,sep=" ")[, c("rsid", "prob", "log10bf")]
