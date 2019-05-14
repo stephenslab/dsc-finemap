@@ -64,7 +64,7 @@ susie_bhat_add_z:
   instances_per_job: 5
 
 finemap:
-  time_per_instance: 61m
+  time_per_instance: 20m
   instances_per_job: 5
 
 finemap_add_z:
