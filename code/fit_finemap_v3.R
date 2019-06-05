@@ -115,21 +115,50 @@ finemap_mvar_v1.3 <- function(bhat, se, allele_freq, LD_file, n, k, method, args
 }
 
 ## MAIN
-z = sumstats$bhat / sumstats$shat;
 library(data.table);
-if(add_z){
+z = sumstats$bhat / sumstats$shat;
+idx = which(maf[[ld_method]] > maf_thresh);
+z = z[idx];
+maf_ld = maf[[ld_method]][idx];
+if(maf_thresh > 0){
   r = as.matrix(fread(ld[[ld_method]]));
+  r = r[idx, idx]
   if(ld_method == 'out_sample'){
-    r = cov2cor(r*(N_out-1) + tcrossprod(z));
-    r = (r + t(r))/2;
-    write.table(r,ld_out_z_file,quote=F,col.names=F,row.names=F);
-    ld_file = ld_out_z_file;
+    if(add_z){
+      r = cov2cor(r*(N_out-1) + tcrossprod(z));
+      r = (r + t(r))/2;
+      write.table(r,ld_maf_out_z_file,quote=F,col.names=F,row.names=F);
+      ld_file = ld_maf_out_z_file;
+    }else{
+      write.table(r,ld_maf_out_file,quote=F,col.names=F,row.names=F);
+      ld_file = ld_maf_out_file;
+    }
   }else{
-    r = cov2cor(r*(N_in-1) + tcrossprod(z));
-    r = (r + t(r))/2;
-    write.table(r,ld_in_z_file,quote=F,col.names=F,row.names=F);
-    ld_file = ld_in_z_file;
+    if(add_z){
+      r = cov2cor(r*(N_in-1) + tcrossprod(z));
+      r = (r + t(r))/2;
+      write.table(r,ld_maf_in_z_file,quote=F,col.names=F,row.names=F);
+      ld_file = ld_maf_in_z_file;
+    }else{
+      write.table(r,ld_maf_in_file,quote=F,col.names=F,row.names=F);
+      ld_file = ld_maf_in_file;
+    }
   }
-} else { ld_file = ld[[ld_method]] }
-posterior = finemap_mvar_v1.3(sumstats$bhat, sumstats$shat, maf[[maf_method]],
+}else if(maf_thresh == 0){
+  if(add_z){
+    r = as.matrix(fread(ld[[ld_method]]));
+    if(ld_method == 'out_sample'){
+      r = cov2cor(r*(N_out-1) + tcrossprod(z));
+      r = (r + t(r))/2;
+      write.table(r,ld_out_z_file,quote=F,col.names=F,row.names=F);
+      ld_file = ld_out_z_file;
+    }else{
+      r = cov2cor(r*(N_in-1) + tcrossprod(z));
+      r = (r + t(r))/2;
+      write.table(r,ld_in_z_file,quote=F,col.names=F,row.names=F);
+      ld_file = ld_in_z_file;
+    }
+  }else { ld_file = ld[[ld_method]]}
+}
+posterior = finemap_mvar_v1.3(sumstats$bhat[idx], sumstats$shat[idx], maf_ld,
                               ld_file, N_in, k, method, args, prefix=cache)
