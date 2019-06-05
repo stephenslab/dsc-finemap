@@ -63,11 +63,11 @@ finemap_mcaviar <- function(zscore, LD_file, args, prefix, parallel = FALSE) {
 ## MAIN
 library(data.table);
 z = sumstats$bhat / sumstats$shat;
+r = as.matrix(fread(ld[[ld_method]]));
+idx = which(maf[[ld_method]] > maf_thresh)
+z = z[idx]
+r = r[idx, idx]
 if(maf_thresh > 0){
-  r = as.matrix(fread(ld[[ld_method]]));
-  idx = which(maf[[ld_method]] > maf_thresh)
-  z = z[idx]
-  r = r[idx, idx]
   if(ld_method == 'out_sample'){
     if(add_z){
       r = cov2cor(r*(N_out-1) + tcrossprod(z));
@@ -91,7 +91,6 @@ if(maf_thresh > 0){
   }
 }else if(maf_thresh == 0){
   if(add_z){
-    r = as.matrix(fread(ld[[ld_method]]));
     if(ld_method == 'out_sample'){
       r = cov2cor(r*(N_out-1) + tcrossprod(z));
       r = (r + t(r))/2;

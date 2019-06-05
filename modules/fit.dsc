@@ -30,6 +30,7 @@ caviar: fit_caviar.R
   ld_maf_in_file: file(maf.in.ld)
   cache: file(CAVIAR)
   $posterior: posterior
+  $idx: idx
 
 caviar_add_z(caviar):
   ld_method: "out_sample"
@@ -113,6 +114,7 @@ susie_rss: susie_rss.R + fit_susie_rss.R
   maf_thresh: 0, 0.05
   $fitted: res$fitted
   $posterior: res$posterior
+  $idx: idx
 
 susie_rss_add_z(susie_rss):
   add_z: TRUE
@@ -141,6 +143,7 @@ susie_bhat: susie_bhat.R + fit_susie_bhat.R
   maf_thresh: 0, 0.05
   $fitted: res$fitted
   $posterior: res$posterior
+  $idx: idx
 
 susie_bhat_add_z(susie_bhat):
   add_z: TRUE
