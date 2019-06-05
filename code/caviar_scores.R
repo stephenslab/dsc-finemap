@@ -22,7 +22,7 @@ caviar_scores = function(cs, pip, true_coef) {
   return(list(total=total, valid=valid, size=size, signal_pip = pip[beta_idx]))
 }
 
-caviar_scores_multiple = function(res, truth) {
+caviar_scores_multiple = function(res, truth, idx) {
   total = valid = size = 0
   signal_pip = list()
   pip = list()
@@ -31,7 +31,7 @@ caviar_scores_multiple = function(res, truth) {
     snps = res[[r]]$snp
     snps = snps[order(as.numeric(snps$snp)),]
     
-    out = caviar_scores(set, snps$snp_prob, truth[,r])
+    out = caviar_scores(set, snps$snp_prob, truth[idx,r])
     total = total + out$total
     valid = valid + out$valid
     size = size + out$size

@@ -25,7 +25,7 @@ plot_susie: plot_susie.R
   result: $fitted
   $plot_file: file(pdf)
 
-score_susie: susie_scores.R + R(sc = susie_scores_multiple($(fitted), $(meta)$true_coef[$(idx),]))
+score_susie: susie_scores.R + R(sc = susie_scores_multiple($(fitted), $(meta)$true_coef, $(idx)))
     $total: sc$total
     $valid: sc$valid
     $size: median(sc$size)
@@ -47,14 +47,14 @@ score_dap: dap_scores.R + R(sc = dap_scores_multiple($(posterior), $(meta)$true_
     $signal_pip: sc$signal_pip
     $pip: sc$pip
 
-score_finemap: finemap_scores.R + R(sc = finemap_v1.3_scores_multiple($(posterior), $(meta)$true_coef[$(idx),]))
+score_finemap: finemap_scores.R + R(sc = finemap_v1.3_scores_multiple($(posterior), $(meta)$true_coef, $(idx)))
     $total: sc$total
     $valid: sc$valid
     $size: median(sc$size)
     $signal_pip: sc$signal_pip
     $pip: sc$pip
     
-score_caviar: caviar_scores.R + R(sc = caviar_scores_multiple($(posterior), $(meta)$true_coef[$(idx),]))
+score_caviar: caviar_scores.R + R(sc = caviar_scores_multiple($(posterior), $(meta)$true_coef, $(idx)))
     $total: sc$total
     $valid: sc$valid
     $size: median(sc$size)
