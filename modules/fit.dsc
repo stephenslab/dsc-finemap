@@ -16,12 +16,18 @@ caviar: fit_caviar.R
   sumstats: $sumstats
   ld: $ld
   ld_method: "in_sample","out_sample"
+  maf: $maf
+  maf_thresh: 0, 0.05
   N_out: $N_out
   N_in: $N_in
-  args: "-g 0.001 -c 2"
+  args: "-g 0.01 -c 2"
   add_z: FALSE, TRUE
   ld_out_z_file: file(out.z.ld)
   ld_in_z_file: file(in.z.ld)
+  ld_maf_out_z_file: file(maf.out.z.ld)
+  ld_maf_out_file: file(maf.out.ld)
+  ld_maf_in_z_file: file(maf.in.z.ld)
+  ld_maf_in_file: file(maf.in.ld)
   cache: file(CAVIAR)
   $posterior: posterior
 
@@ -30,8 +36,6 @@ caviar_add_z(caviar):
   add_z: TRUE
   
 finemap(caviar): fit_finemap_v3.R
-  maf: $maf
-  maf_method: 'maf_in'
   k: NULL
   method: 'sss'
   args: "n-causal-snps 5"
@@ -100,11 +104,13 @@ susie_rss: susie_rss.R + fit_susie_rss.R
   L: 1, 2, 5
   ld: $ld
   ld_method: "in_sample", "out_sample"
-  lamb: 0, 1e-4, 0.1, 1
+  lamb: 0, 0.1, 1
   estimate_residual_variance: TRUE, FALSE
   add_z: FALSE, TRUE
   N_out: $N_out
   N_in: $N_in
+  maf: $maf
+  maf_thresh: 0, 0.05
   $fitted: res$fitted
   $posterior: res$posterior
 
@@ -131,6 +137,8 @@ susie_bhat: susie_bhat.R + fit_susie_bhat.R
   add_z: FALSE, TRUE
   N_out: $N_out
   N_in: $N_in
+  maf: $maf
+  maf_thresh: 0, 0.05
   $fitted: res$fitted
   $posterior: res$posterior
 
