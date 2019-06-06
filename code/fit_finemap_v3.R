@@ -48,6 +48,9 @@ run_finemap_v1.3 <- function(bhat, se, allele_freq, LD_file, n, k, method,args =
     return(list(snp=NULL, config=NULL, set=NULL, ncausal=NULL))
   }
 
+  # remove unused files
+  file.remove(cfg$z)
+  
   # read output tables
   snp = read.table(cfg$snp,header=TRUE,sep=" ")[, c("rsid", "prob", "log10bf")]
   colnames(snp) = c("snp", "snp_prob", "snp_log10bf")
@@ -162,3 +165,8 @@ if(maf_thresh > 0){
 }
 posterior = finemap_mvar_v1.3(sumstats$bhat[idx], sumstats$shat[idx], maf_ld,
                               ld_file, N_in, k, method, args, prefix=cache)
+if(maf_thresh > 0 || add_z == TRUE){
+  if(file.exists(ld_file)){
+    file.remove(ld_file)
+  }
+}

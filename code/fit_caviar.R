@@ -20,6 +20,9 @@ run_caviar <- function(z, LD_file, args = "", prefix="data")
       stop("Cannot find one of the post, set, and log files")
   }
   
+  # remove unused files
+  file.remove(cfg$z)
+  
   log <- readLines(cfg$log)
 
   # read output tables
@@ -105,3 +108,8 @@ if(maf_thresh > 0){
   }else { ld_file = ld[[ld_method]] }
 }
 posterior = finemap_mcaviar(z,ld_file, args, prefix=cache)
+if(maf_thresh > 0 || add_z == TRUE){
+  if(file.exists(ld_file)){
+    file.remove(ld_file)
+  }
+}
