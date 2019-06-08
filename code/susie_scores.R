@@ -56,14 +56,14 @@ susie_scores = function(sets, pip, true_coef) {
               signal_pip = pip[beta_idx]))
 }
 
-susie_scores_multiple = function(res, truth, idx) {
+susie_scores_multiple = function(res, truth) {
   total = valid = size = purity = top = overlap = 0
   signal_pip = list()
   pip = list()
   objective = vector()
   converged = vector()
   for (r in 1:length(res)) {
-    out = susie_scores(res[[r]]$sets, res[[r]]$pip, truth[idx,r])
+    out = susie_scores(res[[r]]$sets, res[[r]]$pip, truth[,r])
     total = total + out$total
     valid = valid + out$valid
     size = size + out$size

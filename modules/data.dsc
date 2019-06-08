@@ -21,6 +21,14 @@ full_data: sim_utils.R + R(data = readRDS(dataset);
             
             maf.in = apply(X.in, 2, function(x) sum(x)/(2*length(x)));
             maf.out = apply(X.out, 2, function(x) sum(x)/(2*length(x)));
+            in.idx = maf.in > maf_thresh;
+            out.idx = maf.in > maf_thresh;
+            overlap.idx = as.logical(in.idx*out.idx);
+            X.in = X.in[, overlap.idx];
+            X.out = X.ou[, overlap.idx];
+            maf.in = maf.in[overlap.idx];
+            maf.out = maf.out[overlap.idx];
+            
             X.in = center_scale(X.in);
             X.out = center_scale(X.out);
 
@@ -33,6 +41,7 @@ full_data: sim_utils.R + R(data = readRDS(dataset);
   subset: NULL
   ld_in_file: file(in.ld)
   ld_out_file: file(out.ld)
+  maf_thresh: 0.05
   $X_in: X.in
   $X_out: X.out
   $Y: data$Y

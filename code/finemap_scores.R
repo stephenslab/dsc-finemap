@@ -72,7 +72,7 @@ finemap_v1.3_scores = function(cs, pip, true_coef) {
   return(list(total=total, valid=valid, size=size, signal_pip = pip[beta_idx]))
 }
 
-finemap_v1.3_scores_multiple = function(res, truth, idx) {
+finemap_v1.3_scores_multiple = function(res, truth) {
   total = valid = size = 0
   signal_pip = list()
   pip = list()
@@ -85,7 +85,7 @@ finemap_v1.3_scores_multiple = function(res, truth, idx) {
     }else{
       snps = snps[order(as.numeric(snps$snp)),]
 
-      out = finemap_v1.3_scores(set, snps$snp_prob, truth[idx,r])
+      out = finemap_v1.3_scores(set, snps$snp_prob, truth[,r])
       pip[[r]] = snps$snp_prob
     }
     total = total + out$total
