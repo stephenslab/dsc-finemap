@@ -24,7 +24,6 @@ caviar: fit_caviar.R
   ld_in_z_file: file(in.z.ld)
   cache: file(CAVIAR)
   $posterior: posterior
-  $idx: idx
 
 caviar_add_z(caviar):
   ld_method: "out_sample"
@@ -97,7 +96,7 @@ susie_rss: susie_rss.R + fit_susie_rss.R
   @CONF: R_libs = (susieR, data.table)
   sumstats: $sumstats
   s_init: NA
-  L: 1, 2, 5
+  L: 2, 5
   ld: $ld
   ld_method: "in_sample", "out_sample"
   lamb: 0, 0.1, 1
@@ -107,7 +106,6 @@ susie_rss: susie_rss.R + fit_susie_rss.R
   N_in: $N_in
   $fitted: res$fitted
   $posterior: res$posterior
-  $idx: idx
 
 susie_rss_add_z(susie_rss):
   add_z: TRUE
@@ -125,7 +123,7 @@ susie_bhat: susie_bhat.R + fit_susie_bhat.R
   sumstats: $sumstats
   s_init: NA
   n: $N_in
-  L: 1, 2, 5
+  L: 2, 5
   ld: $ld
   ld_method: "in_sample", "out_sample"
   estimate_residual_variance: TRUE, FALSE
@@ -134,7 +132,6 @@ susie_bhat: susie_bhat.R + fit_susie_bhat.R
   N_in: $N_in
   $fitted: res$fitted
   $posterior: res$posterior
-  $idx: idx
 
 susie_bhat_add_z(susie_bhat):
   add_z: TRUE
