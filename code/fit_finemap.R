@@ -98,3 +98,5 @@ if(add_z){
   }
 } else { ld_file = ld[[ld_method]] }  
 
+posterior = finemap_mvar(z,ld_file, N_in, k, args, prefix=cache)
+
