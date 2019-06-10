@@ -17,7 +17,7 @@ plot_finemap <- function(x,
 
   p1 <- plot_ncausal(x,
     lim_prob = lim_prob_ncausal, ...)
-  p2 <- plot_set(x,
+  p2 <- plot_config(x,
     top_rank = top_rank_config,
     label_size = label_size_config,
     lim_prob = lim_prob_config, ...)
@@ -54,9 +54,9 @@ plot_ncausal <- function(x, lim_prob, ...)
   return(p)
 }
 
-plot_set <- function(x, lim_prob, label_size, top_rank, ...)
+plot_config <- function(x, lim_prob, label_size, top_rank, ...)
 {
-  ptab <- x$set
+  ptab <- x$config
 
   ptab <- head(ptab, top_rank)
 

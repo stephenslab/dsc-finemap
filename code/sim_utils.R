@@ -11,4 +11,7 @@ get_center <- function(k,n) {
   return(start:end)
 }
 
-center_scale <- function(X) return(susieR:::set_X_attributes(as.matrix(X), center=TRUE, scale = TRUE))
+center_scale <- function(X){
+  X = susieR:::set_X_attributes(as.matrix(X), center=TRUE, scale = TRUE)
+  return(t( (t(X) - attr(X, "scaled:center")) / attr(X, "scaled:scale")  ))
+}

@@ -59,6 +59,7 @@ susie_scores = function(sets, pip, true_coef) {
 susie_scores_multiple = function(res, truth) {
   total = valid = size = purity = top = overlap = 0
   signal_pip = list()
+  pip = list()
   objective = vector()
   converged = vector()
   for (r in 1:length(res)) {
@@ -77,7 +78,8 @@ susie_scores_multiple = function(res, truth) {
       converged[r] = res[[r]]$converged
     }
     signal_pip[[r]] = out$signal_pip
+    pip[[r]] = res[[r]]$pip
   }
   return(list(total=total, valid=valid, size=size, purity=purity, top=top, objective=objective, converged=sum(converged),
-              overlap=overlap, signal_pip = unlist(signal_pip)))
+              overlap=overlap, signal_pip = unlist(signal_pip), pip = unlist(pip)))
 }
