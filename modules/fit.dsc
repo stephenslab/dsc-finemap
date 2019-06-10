@@ -28,8 +28,13 @@ caviar: fit_caviar.R
 caviar_add_z(caviar):
   ld_method: "out_sample"
   add_z: TRUE
+
+finemap(caviar): fit_finemap.R
+  k: NULL
+  args: "n-causal-snps 5"
+  cache: file(FM)
   
-finemap(caviar): fit_finemap_v3.R
+finemapv3(caviar): fit_finemap_v3.R
   k: NULL
   maf: $maf
   method: 'sss'
