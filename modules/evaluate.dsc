@@ -47,7 +47,7 @@ score_dap: dap_scores.R + R(sc = dap_scores_multiple($(posterior), $(meta)$true_
     $signal_pip: sc$signal_pip
     $pip: sc$pip
 
-score_finemap: finemap_scores.R + R(sc = finemap_v1.3_scores_multiple($(posterior), $(meta)$true_coef))
+score_finemap: finemap_scores.R + R(sc = finemap_scores_multiple($(posterior), $(meta)$true_coef))
     $total: sc$total
     $valid: sc$valid
     $size: median(sc$size)
