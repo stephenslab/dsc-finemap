@@ -12,12 +12,12 @@
 # $posterior: for inference
 
 caviar: fit_caviar.R
-  @CONF: R_libs = (dplyr, magrittr)
+  @CONF: R_libs = (dplyr, magrittr, data.table)
   sumstats: $sumstats
   ld: $ld
   ld_method: "in_sample","out_sample"
   N_out: $N_out
-  N_in: $N_in
+  N_in: $N_sample
   args: "-g 0.01 -c 2"
   add_z: FALSE, TRUE
   ld_out_z_file: file(out.z.ld)
@@ -46,7 +46,7 @@ finemap_add_z(finemap):
   ld_method: "out_sample"
 
 dap: fit_dap.py + Python(posterior = dap_batch(X, Y, cache, args))
-  X: $X
+  X: $X_sample
   Y: $Y
   args: "-ld_control 0.20 --all"
   cache: file(DAP)
@@ -69,14 +69,14 @@ susie: fit_susie.R
   maxL: 5
   null_weight: 0
   prior_var: 0
-  X: $X_in
+  X: $X_sample
   Y: $Y
   $posterior: posterior
   $fitted: fitted
 
 susie_auto: fit_susie.R
   @CONF: R_libs = susieR
-  X: $X
+  X: $X_sample
   Y: $Y
   prior_var: "auto"
   $posterior: posterior
@@ -108,7 +108,7 @@ susie_rss: susie_rss.R + fit_susie_rss.R
   estimate_residual_variance: TRUE, FALSE
   add_z: FALSE, TRUE
   N_out: $N_out
-  N_in: $N_in
+  N_in: $N_sample
   $fitted: res$fitted
   $posterior: res$posterior
 
@@ -127,14 +127,14 @@ susie_bhat: susie_bhat.R + fit_susie_bhat.R
   @CONF: R_libs = (susieR, data.table)
   sumstats: $sumstats
   s_init: NA
-  n: $N_in
+  n: $N_sample
   L: 2, 5
   ld: $ld
   ld_method: "in_sample", "out_sample"
   estimate_residual_variance: TRUE, FALSE
   add_z: FALSE, TRUE
   N_out: $N_out
-  N_in: $N_in
+  N_in: $N_sample
   $fitted: res$fitted
   $posterior: res$posterior
 

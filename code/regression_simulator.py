@@ -79,5 +79,5 @@ def simple_lm(data, reg, c):
         Y.append(eff.get_y(reg, pve = c['pve']))
         coef.append(eff.coef)
         sigma.append(eff.residual_variance)
-    reg.Y = np.hstack(Y)
+    reg.Y = np.asmatrix(Y).T
     return np.array(coef).T, np.array(sigma)

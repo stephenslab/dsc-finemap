@@ -14,7 +14,7 @@ base_sim: lib_regression_simulator.py + \
                 regression_simulator.py + \
                 Python(res = simulate_main(dict(X=X,Y=Y), conf, conf['cache']))
   @CONF: python_modules = (seaborn, matplotlib, pprint)
-  X: $X
+  X: $X_sample
   Y: $Y
   n_signal: 3
   n_traits: 2
@@ -47,12 +47,13 @@ original_Y(base_sim):
 
 #----------------------------------------
 # Simulation modules written by Yuxin Zou
+# Used for SuSiE RSS evaluations
 #----------------------------------------
 
 sim_gaussian: simulate.R + \
                 R(res=sim_gaussian_multiple(X, pve, n_signal, effect_weight))
   @CONF: R_libs = susieR
-  X: $X_in
+  X: $X_sample
   pve: 0.1,0.2
   n_signal: 1,2
   effect_weight: rep(1/n_signal, n_signal)
