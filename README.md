@@ -1,5 +1,5 @@
 # dsc-finemap
-DSC for comparing fine-mapping methods.
+DSC for comparing genetic fine-mapping methods.
 
 ## Benchmarks
 
@@ -15,6 +15,7 @@ to view available runs, and
 
 ```
 dsc susie_paper.dsc
+dsc susie_paper.dsc --target all_ten
 ```
 
 to run the benchmark.
