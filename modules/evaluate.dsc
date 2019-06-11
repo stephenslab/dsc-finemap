@@ -54,6 +54,13 @@ score_finemap: finemap_scores.R + R(sc = finemap_scores_multiple($(posterior), $
     $signal_pip: sc$signal_pip
     $pip: sc$pip
     
+score_finemapv3: finemap_scores.R + R(sc = finemap_v1.3_scores_multiple($(posterior), $(meta)$true_coef))
+    $total: sc$total
+    $valid: sc$valid
+    $size: median(sc$size)
+    $signal_pip: sc$signal_pip
+    $pip: sc$pip
+    
 score_caviar: caviar_scores.R + R(sc = caviar_scores_multiple($(posterior), $(meta)$true_coef))
     $total: sc$total
     $valid: sc$valid
