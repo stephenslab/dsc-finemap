@@ -17,4 +17,3 @@ DSC:
   global:
     data_file: data/gtex-manifest.txt
   output: output/r_compare_add_z_lambda_caviar_maf
-
