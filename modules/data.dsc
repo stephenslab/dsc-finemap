@@ -10,6 +10,7 @@ full_data: sim_utils.R + data_sim.R
   tag: "full"
   dataset: Shell{head -150 ${data_file}}
   subset: NULL
+  subsample: ${prop_samples}
   ld_sample_file: file(sample.ld)
   ld_out_file: file(out.ld)
   maf_thresh: 0.05
@@ -19,7 +20,7 @@ full_data: sim_utils.R + data_sim.R
   $Y: data$Y
   $N_sample: nrow(X.sample)
   $N_out: nrow(X.out)
-  $maf: list(in_sample = maf.sample, out_sample = maf.out)
+  $maf: list(in_sample=maf.sample, out_sample=maf.out)
   $meta: data$meta
   $ld: list(in_sample=ld_sample_file, out_sample=ld_out_file)
 

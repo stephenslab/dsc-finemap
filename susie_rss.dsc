@@ -16,4 +16,5 @@ DSC:
   exec_path: code
   global:
     data_file: data/gtex-manifest.txt
+    prop_samples: 0.5
   output: output/r_compare_add_z_lambda_caviar_maf

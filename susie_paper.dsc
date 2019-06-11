@@ -12,3 +12,5 @@ DSC:
   exec_path: code
   global:
     data_file: data/gtex-manifest.txt
+    prop_samples: 1
+  output: output/susie_paper
