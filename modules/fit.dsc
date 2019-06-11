@@ -11,7 +11,7 @@
 # $fitted: for diagnostics
 # $posterior: for inference
 
-caviar: fit_caviar.R
+caviar: fit_caviar.R + add_z.R + R(posterior = finemap_mcaviar(z,ld_file, args, prefix=cache))
   @CONF: R_libs = (dplyr, magrittr, data.table)
   sumstats: $sumstats
   ld: $ld
@@ -29,12 +29,13 @@ caviar_add_z(caviar):
   ld_method: "out_sample"
   add_z: TRUE
 
-finemap(caviar): fit_finemap.R
+finemap(caviar): fit_finemap.R + add_z.R + R(posterior = finemap_mvar(z,ld_file, N_in, k, args, prefix=cache))
   k: NULL
   args: "n-causal-snps 5"
   cache: file(FM)
   
-finemapv3(caviar): fit_finemap_v3.R
+finemapv3(caviar): fit_finemap_v3.R + add_z.R + R(posterior = finemap_mvar_v1.3(sumstats$bhat, sumstats$shat, 
+                                                  maf[[ld_method]], ld_file, N_in, k, method, args, prefix=cache))
   k: NULL
   maf: $maf
   method: 'sss'
@@ -97,7 +98,7 @@ init_oracle: initialize.R + R(s_init=init_susie($(meta)$true_coef))
   @CONF: R_libs = susieR
   $s_init: s_init
 
-susie_rss: susie_rss.R + fit_susie_rss.R
+susie_rss: fit_susie_rss.R
   @CONF: R_libs = (susieR, data.table)
   sumstats: $sumstats
   s_init: NA
@@ -123,7 +124,7 @@ susie_rss_init(susie_rss):
   s_init: $s_init
   L: 10
 
-susie_bhat: susie_bhat.R + fit_susie_bhat.R
+susie_bhat: fit_susie_bhat.R
   @CONF: R_libs = (susieR, data.table)
   sumstats: $sumstats
   s_init: NA
