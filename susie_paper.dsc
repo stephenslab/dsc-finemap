@@ -7,7 +7,7 @@
 
 DSC:
   run:
-    default: small_data * summarize_ld * lm_pve02 * get_sumstats * (susie * score_susie, dap * score_dap, caviar * score_caviar, finemap * score_finemap)
+    default: small_data * summarize_ld * lm_pve02 * get_sumstats * (susie * score_susie, dap * score_dap, caviar * score_caviar, finemap * score_finemap, finemapv3 * score_finemapv3)
     hard_case: full_data * lm_pve03 * get_sumstats * (susie10 * score_susie, dap * score_dap)
   exec_path: code
   global:
