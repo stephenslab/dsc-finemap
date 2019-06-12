@@ -32,10 +32,11 @@ caviar_add_z(caviar):
 caviar_in_sample(caviar):
   ld_method: "in_sample"
   add_z: FALSE
+  args: "-g 0.001 -c 1", "-g 0.001 -c 2", "-g 0.001 -c 3"
 
 finemap(caviar): fit_finemap.R + add_z.R + R(posterior = finemap_mvar(z,ld_file, N_in, k, args, prefix=cache))
   k: NULL
-  args: "n-causal-snps 5"
+  args: "--n-causal-max 5"
   cache: file(FM)
 
 finemap_add_z(finemap):
@@ -45,18 +46,20 @@ finemap_add_z(finemap):
 finemap_in_sample(finemap):
     ld_method: "in_sample"
     add_z: FALSE
+    args: "--n-causal-max 1", "--n-causal-max 2", "--n-causal-max 3"
 
 finemapv3(caviar): fit_finemap_v3.R + add_z.R + R(posterior = finemap_mvar_v1.3(sumstats$bhat, sumstats$shat, 
                                                   maf[[ld_method]], ld_file, N_in, k, method, args, prefix=cache))
   k: NULL
   maf: $maf
   method: 'sss'
-  args: "n-causal-snps 5"
+  args: "--n-causal-snps 5"
   cache: file(FM)
 
 finemapv3_in_sample(finemapv3):
     ld_method: "in_sample"
     add_z: FALSE
+    args: "--n-causal-snps 1", "--n-causal-snps 2", "--n-causal-snps 3"
 
 dap: fit_dap.py + Python(posterior = dap_batch(X, Y, cache, args))
   X: $X_sample
@@ -79,9 +82,9 @@ susie: fit_susie.R
   # Prior variance of nonzero effects.
   @CONF: R_libs = susieR
   maxI: 200
-  maxL: 5
-  null_weight: 0
-  prior_var: 0
+  maxL: 10
+  null_weight: 0, 0.9
+  prior_var: 0, 0.1, 0.4
   X: $X_sample
   Y: $Y
   $posterior: posterior
@@ -100,7 +103,9 @@ susie01(susie):
   maxL: 1
 
 susie10(susie):
+  null_weight: 0
   maxL: 15
+  prior_var: 0, 0.1
 
 #------------------------------
 # SuSiE with summary statistics

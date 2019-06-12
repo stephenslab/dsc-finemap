@@ -35,3 +35,7 @@ dsc susie_rss.dsc
 ```
 
 to run the benchmark.
+
+## Organize benchmark results
+
+See folder `analysis`. It contains some pipelines, mostly written in [SoS workflow](https://vatlab.github.io/sos-docs/workflow.html#content) and uses [`dscrutils` package](https://github.com/stephenslab/dsc/tree/master/dscrutils), to make various benchmark plots.
