@@ -44,9 +44,9 @@ finemap_add_z(finemap):
   ld_method: "out_sample"
 
 finemap_in_sample(finemap):
-    ld_method: "in_sample"
-    add_z: FALSE
-    args: "--n-causal-max 1", "--n-causal-max 2", "--n-causal-max 3"
+  ld_method: "in_sample"
+  add_z: FALSE
+  args: "--n-causal-max 1", "--n-causal-max 2", "--n-causal-max 3"
 
 finemapv3(caviar): fit_finemap_v3.R + add_z.R + R(posterior = finemap_mvar_v1.3(sumstats$bhat, sumstats$shat, 
                                                   maf[[ld_method]], ld_file, N_in, k, method, args, prefix=cache))
@@ -57,9 +57,9 @@ finemapv3(caviar): fit_finemap_v3.R + add_z.R + R(posterior = finemap_mvar_v1.3(
   cache: file(FM)
 
 finemapv3_in_sample(finemapv3):
-    ld_method: "in_sample"
-    add_z: FALSE
-    args: "--n-causal-snps 1", "--n-causal-snps 2", "--n-causal-snps 3"
+  ld_method: "in_sample"
+  add_z: FALSE
+  args: "--n-causal-snps 1", "--n-causal-snps 2", "--n-causal-snps 3"
 
 dap: fit_dap.py + Python(posterior = dap_batch(X, Y, cache, args))
   X: $X_sample
