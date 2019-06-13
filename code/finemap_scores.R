@@ -33,8 +33,12 @@ finemap_scores_multiple = function(res, truth) {
     if(n > nrow(set)){
       set = NULL
     }else{
-      set = apply(set[1:n,], 1, function(config) as.numeric(strsplit(config[2], ",")[[1]]))
-      set = unique(as.vector(unlist(set)))
+      if (class(set$config) == "character") {
+        set = apply(set[1:n,], 1, function(config) as.numeric(strsplit(config[2], ",")[[1]]))
+        set = unique(as.vector(unlist(set)))
+      } else {
+        set = unique(set$config)
+      }
     }
     snps = snps[order(as.numeric(snps$snp)),]
 
