@@ -55,16 +55,16 @@ susie10:
   time_per_instance: 10m
   instances_per_job: 15
 
-caviar:
+caviar_in_sample:
   n_cpu: 2
   time_per_instance: 4h
   instances_per_job: 1
 
-finemap:
+finemap_in_sample:
   time_per_instance: 30m
   instances_per_job: 5
 
-finemapv3:
+finemapv3_in_sample:
   time_per_instance: 40m
   instances_per_job: 5
 
