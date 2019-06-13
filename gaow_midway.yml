@@ -58,11 +58,11 @@ susie10:
 caviar_in_sample:
   n_cpu: 2
   time_per_instance: 4h
-  instances_per_job: 1
+  instances_per_job: 2
 
 finemap_in_sample:
   time_per_instance: 30m
-  instances_per_job: 5
+  instances_per_job: 8
 
 finemapv3_in_sample:
   time_per_instance: 40m
