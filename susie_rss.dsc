@@ -9,10 +9,12 @@ DSC:
   define:
     data: small_data
     simulate: sim_gaussian * get_sumstats
-    method_susie: susie_bhat, susie_rss
+    method_susie: susie_bhat, susie_bhat_add_z, susie_rss, susie_rss_add_z
+    method_finemap: finemap, finemap_add_z
+    method_caviar: caviar, caviar_add_z
   run:
-    default: data * simulate * ((method_susie * score_susie), (finemap * score_finemap), (caviar * score_caviar))
-    test: data * simulate * finemap
+    default: data * simulate * ((method_susie * score_susie), (method_finemap * score_finemap), (method_caviar * score_caviar))
+    test: data * simulate * caviar
   exec_path: code
   global:
     data_file: data/gtex-manifest.txt

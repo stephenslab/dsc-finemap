@@ -19,7 +19,7 @@ caviar: fit_caviar.R + add_z.R + R(posterior = finemap_mcaviar(z,ld_file, args, 
   N_in: $N_sample
   args: "-g 0.01 -c 2"
   ld_method: "in_sample","out_sample"
-  add_z: FALSE, TRUE
+  add_z: FALSE
   ld_out_z_file: file(out.z.ld)
   ld_in_z_file: file(in.z.ld)
   cache: file(CAVIAR)
@@ -31,12 +31,11 @@ caviar_add_z(caviar):
 
 caviar_in_sample(caviar):
   ld_method: "in_sample"
-  add_z: FALSE
   args: "-g 0.001 -c 1", "-g 0.001 -c 2", "-g 0.001 -c 3"
 
 finemap(caviar): fit_finemap.R + add_z.R + R(posterior = finemap_mvar(z,ld_file, N_in, k, args, prefix=cache))
   k: NULL
-  args: "--n-causal-max 5"
+  args: "--n-causal-max 2", "--n-causal-max 5"
   cache: file(FM)
 
 finemap_add_z(finemap):
@@ -45,7 +44,6 @@ finemap_add_z(finemap):
 
 finemap_in_sample(finemap):
   ld_method: "in_sample"
-  add_z: FALSE
   args: "--n-causal-max 1", "--n-causal-max 2", "--n-causal-max 3"
 
 finemapv3(caviar): fit_finemap_v3.R + add_z.R + R(posterior = finemap_mvar_v1.3(sumstats$bhat, sumstats$shat, 
@@ -58,7 +56,6 @@ finemapv3(caviar): fit_finemap_v3.R + add_z.R + R(posterior = finemap_mvar_v1.3(
 
 finemapv3_in_sample(finemapv3):
   ld_method: "in_sample"
-  add_z: FALSE
   args: "--n-causal-snps 1", "--n-causal-snps 2", "--n-causal-snps 3"
 
 dap: fit_dap.py + Python(posterior = dap_batch(X, Y, cache, args))
@@ -124,7 +121,7 @@ susie_rss: fit_susie_rss.R
   ld_method: "in_sample", "out_sample"
   lamb: 0, 0.1, 1
   estimate_residual_variance: TRUE, FALSE
-  add_z: FALSE, TRUE
+  add_z: FALSE
   N_out: $N_out
   N_in: $N_sample
   $fitted: res$fitted
@@ -150,7 +147,7 @@ susie_bhat: fit_susie_bhat.R
   ld: $ld
   ld_method: "in_sample", "out_sample"
   estimate_residual_variance: TRUE, FALSE
-  add_z: FALSE, TRUE
+  add_z: FALSE
   N_out: $N_out
   N_in: $N_sample
   $fitted: res$fitted
