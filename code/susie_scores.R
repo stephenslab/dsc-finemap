@@ -81,5 +81,5 @@ susie_scores_multiple = function(res, truth) {
     pip[[r]] = res[[r]]$pip
   }
   return(list(total=total, valid=valid, size=size, purity=purity, top=top, objective=objective, converged=sum(converged),
-              overlap=overlap, signal_pip = unlist(signal_pip), pip = unlist(pip)))
+              overlap=overlap, signal_pip = do.call(cbind, signal_pip), pip = do.call(cbind, pip)))
 }

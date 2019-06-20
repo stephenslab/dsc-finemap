@@ -84,5 +84,5 @@ dap_scores_multiple = function(res, truth) {
     pip[[r]] = snps$snp_prob
   }
   return(list(total=total, valid=valid, size=size, avgr2=avgr2, top=top, overlap=overlap, 
-              signal_pip = unlist(signal_pip), pip = unlist(pip)))
+              signal_pip = do.call(cbind, signal_pip), pip = do.call(cbind, pip)))
 }

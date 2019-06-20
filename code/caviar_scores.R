@@ -38,5 +38,5 @@ caviar_scores_multiple = function(res, truth) {
     signal_pip[[r]] = out$signal_pip
     pip[[r]] = snps$snp_prob
   }
-  return(list(total=total, valid=valid, size=size, signal_pip = unlist(signal_pip), pip = unlist(pip)))
+  return(list(total=total, valid=valid, size=size, signal_pip = do.call(cbind, signal_pip), pip = do.call(cbind, pip)))
 }
