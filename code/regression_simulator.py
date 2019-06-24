@@ -76,7 +76,7 @@ def simple_lm(data, reg, c):
     for i in range(c['n_traits']):
         eff.get_effects()
         eff.sparsify_effects(c['n_signal'])
-        Y.append(eff.get_y(reg, pve = c['pve']))
+        Y.append(eff.get_y(reg, pve = c['pve'], polygenic_pve = c['polygenic_pve']))
         coef.append(eff.coef)
         sigma.append(eff.residual_variance)
     reg.Y = np.asmatrix(Y).T

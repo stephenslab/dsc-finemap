@@ -20,6 +20,7 @@ base_sim: lib_regression_simulator.py + \
   n_traits: 2
   amplitude: 1
   pve: 0.05, 0.1, 0.2, 0.4
+  polygenic_pve: 0
   eff_mode: "simple_lm"
   residual_mode: "identity"
   swap_eff: False
@@ -37,6 +38,10 @@ simple_lm(base_sim):
 
 lm_pve02(simple_lm):
   pve: 0.2
+
+lm_pve02poly05(simple_lm):
+  pve: 0.2
+  polygenic_pve: 0.5
 
 lm_pve03(simple_lm):
   pve: 0.3

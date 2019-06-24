@@ -275,16 +275,25 @@ class UnivariateMixture:
             if j not in selected_index:
                 self.coef[j] = 0
                 
-    def get_y(self, regression_data, pve = None, sigma = None):
+    def get_y(self, regression_data, pve = None, sigma = None, polygenic_pve = None):
         if sigma is None and pve is None:
             raise ValueError('Need one of sigma or pve.')
         if not (pve > 0 and pve < 1):
             raise ValueError(f'PVE has to be between 0 and 1, not {pve}.')
+        coef = self.coef
         if pve is not None:
             genetic_var = np.var(np.dot(regression_data.X, self.coef.T))
             pheno_var = genetic_var / pve
             self.residual_variance = pheno_var - genetic_var
-        y = np.dot(regression_data.X, self.coef.T) + np.random.normal(0, np.sqrt(self.residual_variance), regression_data.X.shape[0])
+            if polygenic_pve is not None and polygenic_pve > 0:
+                # generate many other smaller effects cumulatively having PVE at `polygenic_pve`, say, 50%
+                assert polygenic_pve > pve
+                polygenic_sigma = np.sqrt((pheno_var * polygenic_pve - genetic_var) / sum(np.var(regression_data.X[:,self.coef == 0], axis=0)))
+                for idx, item in enumerate(self.coef == 0):
+                    if (item):
+                        coef[idx] =  np.random.normal(loc=0.0, scale=polygenic_sigma)
+                self.residual_variance = pheno_var * (1 - polygenic_pve)
+        y = np.dot(regression_data.X, coef.T) + np.random.normal(0, np.sqrt(self.residual_variance), regression_data.X.shape[0])
         # y.reshape(len(y), 1)
         return y.T
         
