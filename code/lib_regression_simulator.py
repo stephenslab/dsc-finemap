@@ -280,7 +280,7 @@ class UnivariateMixture:
             raise ValueError('Need one of sigma or pve.')
         if not (pve > 0 and pve < 1):
             raise ValueError(f'PVE has to be between 0 and 1, not {pve}.')
-        coef = self.coef
+        coef = copy.deepcopy(self.coef)
         if pve is not None:
             genetic_var = np.var(np.dot(regression_data.X, self.coef.T))
             pheno_var = genetic_var / pve
