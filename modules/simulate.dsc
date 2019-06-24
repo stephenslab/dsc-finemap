@@ -40,6 +40,7 @@ lm_pve02(simple_lm):
   pve: 0.2
 
 lm_pve02poly05(simple_lm):
+  n_signal: 1, 2, 3
   pve: 0.2
   polygenic_pve: 0.5
 
