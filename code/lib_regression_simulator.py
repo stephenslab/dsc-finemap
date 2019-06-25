@@ -286,13 +286,13 @@ class UnivariateMixture:
             pheno_var = genetic_var / pve
             self.residual_variance = pheno_var - genetic_var
             if polygenic_pve is not None and polygenic_pve > 0:
-                # generate many other smaller effects cumulatively having PVE at `polygenic_pve`, say, 50%
-                assert polygenic_pve > pve
-                polygenic_sigma = np.sqrt((pheno_var * polygenic_pve - genetic_var) / sum(np.var(regression_data.X[:,self.coef == 0], axis=0)))
+                assert (polygenic_pve + pve) < 1
+                # generate many other smaller effects cumulatively having PVE at `polygenic_pve`, say, 5% for eQTL
+                polygenic_sigma = np.sqrt(pheno_var * polygenic_pve / sum(np.var(regression_data.X[:,self.coef == 0], axis=0)))
                 for idx, item in enumerate(self.coef == 0):
                     if (item):
                         coef[idx] =  np.random.normal(loc=0.0, scale=polygenic_sigma)
-                self.residual_variance = pheno_var * (1 - polygenic_pve)
+                self.residual_variance = pheno_var * (1 - polygenic_pve - pve)
         y = np.dot(regression_data.X, coef.T) + np.random.normal(0, np.sqrt(self.residual_variance), regression_data.X.shape[0])
         # y.reshape(len(y), 1)
         return y.T
