@@ -163,3 +163,13 @@ susie_bhat_large(susie_bhat):
 susie_bhat_init(susie_bhat):
   s_init: $s_init
   L: 10
+
+#------------
+# https://github.com/crbasel/hierinf/
+#------------
+
+hierinf: fit_hierinf.R
+  @CONF: R_libs = hierinf
+  X: $X_sample
+  Y: $Y
+  $posterior: res
