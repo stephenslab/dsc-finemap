@@ -50,7 +50,7 @@ hierinf_scores = function(sets, true_coef) {
 hierinf_scores_multiple = function(res, truth) {
   total = valid = size = purity = overlap = 0
   for (r in 1:length(res)) {
-    out = susie_scores(res[[r]]$sets, truth[,r])
+    out = hierinf_scores(res[[r]]$sets, truth[,r])
     total = total + out$total
     valid = valid + out$valid
     size = size + out$size

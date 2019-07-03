@@ -67,3 +67,10 @@ score_caviar: caviar_scores.R + R(sc = caviar_scores_multiple($(posterior), $(me
     $size: median(sc$size)
     $signal_pip: sc$signal_pip
     $pip: sc$pip
+
+score_hierinf: hierinf_scores.R + R(sc = hierinf_scores_multiple($(fitted), $(meta)$true_coef))
+    $total: sc$total
+    $valid: sc$valid
+    $size: median(sc$size)
+    $purity: median(sc$purity)
+    $overlap: sc$overlap
