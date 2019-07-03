@@ -8,7 +8,7 @@
 
 full_data: sim_utils.R + data_sim.R
   tag: "full"
-  dataset: Shell{head -150 ${data_file}}
+  dataset: Shell{head -250 ${data_file}}
   subset: NULL
   subsample: ${prop_samples}
   ld_sample_file: file(sample.ld)
