@@ -57,8 +57,8 @@ susie10:
 
 caviar_in_sample:
   n_cpu: 2
-  time_per_instance: 4h
-  instances_per_job: 2
+  time_per_instance: 5h
+  instances_per_job: 1
 
 finemap_in_sample:
   time_per_instance: 30m
@@ -67,6 +67,10 @@ finemap_in_sample:
 finemapv3_in_sample:
   time_per_instance: 40m
   instances_per_job: 5
+
+hierinf:
+  time_per_instance: 20m
+  instances_per_job: 8
 
 # For P = 10,000, causal = 10, DAP needs 120m!
 # need to make a separate file to run that.
@@ -87,6 +91,10 @@ score_caviar:
   instances_per_job: 30
 
 score_finemap:
+  time_per_instance: 3m
+  instances_per_job: 30
+
+score_hierinf:
   time_per_instance: 3m
   instances_per_job: 30
 
