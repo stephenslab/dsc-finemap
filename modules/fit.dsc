@@ -172,4 +172,4 @@ hierinf: fit_hierinf.R
   @CONF: R_libs = hierinf
   X: $X_sample
   Y: $Y
-  $posterior: res
+  $fitted: res
