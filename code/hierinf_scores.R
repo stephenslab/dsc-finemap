@@ -26,16 +26,18 @@ hierinf_scores = function(sets, true_coef) {
   if (is.null(dim(true_coef))) beta_idx = which(true_coef!=0)
   else beta_idx = which(apply(true_coef, 1, sum) != 0)
   if(is.null(sets)){
-    return(list(total=NA, valid=NA, size=NA, purity=NA, has_overlap=NA))
+    return(list(total=NA, valid=NA, size=NA, purity=NA, avgr2=NA, has_overlap=NA))
   }
   cs = sets$cs
   if (is.null(cs)) {
     size = 0
     total = 0
     purity = 0
+    avgr2 = 0
   } else {
     size = sapply(cs,length)
     purity = as.vector(sets$purity[,1])
+    avgr2 = as.vector(sets$purity[,2])
     total = length(cs)
   }
   valid = 0
@@ -44,18 +46,20 @@ hierinf_scores = function(sets, true_coef) {
       if (any(cs[[i]]%in%beta_idx)) valid=valid+1
     }
   }
-  return(list(total=total, valid=valid, size=size, purity=purity, has_overlap=check_overlap(cs)))
+  return(list(total=total, valid=valid, size=size, purity=purity, avgr2=avgr2, has_overlap=check_overlap(cs)))
 }
 
 hierinf_scores_multiple = function(res, truth) {
-  total = valid = size = purity = overlap = 0
+  total = valid = overlap = vector()
+  size = purity = avgr2 = list()
   for (r in 1:length(res)) {
     out = hierinf_scores(res[[r]]$sets, truth[,r])
-    total = total + out$total
-    valid = valid + out$valid
-    size = size + out$size
-    purity = purity + out$purity
-    overlap = overlap + out$has_overlap
+    total[r] = out$total
+    valid[r] = out$valid
+    size[[r]] = out$size
+    purity[[r]] = out$purity
+    avgr2[[r]] = out$avgr2
+    overlap[r] = out$has_overlap
   }
-  return(list(total=total, valid=valid, size=size, purity=purity, overlap=overlap))
+  return(list(total=total, valid=valid, size=size, purity=purity, avgr2=avgr2, overlap=overlap))
 }

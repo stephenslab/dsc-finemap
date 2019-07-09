@@ -28,8 +28,9 @@ plot_susie: plot_susie.R
 score_susie: susie_scores.R + R(sc = susie_scores_multiple($(fitted), $(meta)$true_coef))
     $total: sc$total
     $valid: sc$valid
-    $size: median(sc$size)
-    $purity: median(sc$purity)
+    $size: sc$size
+    $purity: sc$purity
+    $avgr2: sc$avgr2
     $top: sc$top
     $objective: sc$objective
     $converged: sc$converged
@@ -40,8 +41,8 @@ score_susie: susie_scores.R + R(sc = susie_scores_multiple($(fitted), $(meta)$tr
 score_dap: dap_scores.R + R(sc = dap_scores_multiple($(posterior), $(meta)$true_coef))
     $total: sc$total
     $valid: sc$valid
-    $size: median(sc$size)
-    $avgr2: median(sc$avgr2)
+    $size: sc$size
+    $avgr2: sc$avgr2
     $top: sc$top
     $overlap: sc$overlap
     $signal_pip: sc$signal_pip
@@ -50,27 +51,28 @@ score_dap: dap_scores.R + R(sc = dap_scores_multiple($(posterior), $(meta)$true_
 score_finemap: finemap_scores.R + R(sc = finemap_scores_multiple($(posterior), $(meta)$true_coef))
     $total: sc$total
     $valid: sc$valid
-    $size: median(sc$size)
+    $size: sc$size
     $signal_pip: sc$signal_pip
     $pip: sc$pip
     
 score_finemapv3: finemap_scores.R + R(sc = finemap_v1.3_scores_multiple($(posterior), $(meta)$true_coef))
     $total: sc$total
     $valid: sc$valid
-    $size: median(sc$size)
+    $size: sc$size
     $signal_pip: sc$signal_pip
     $pip: sc$pip
     
 score_caviar: caviar_scores.R + R(sc = caviar_scores_multiple($(posterior), $(meta)$true_coef))
     $total: sc$total
     $valid: sc$valid
-    $size: median(sc$size)
+    $size: sc$size
     $signal_pip: sc$signal_pip
     $pip: sc$pip
 
 score_hierinf: hierinf_scores.R + R(sc = hierinf_scores_multiple($(fitted), $(meta)$true_coef))
     $total: sc$total
     $valid: sc$valid
-    $size: median(sc$size)
-    $purity: median(sc$purity)
+    $size: sc$size
+    $purity: sc$purity
+    $avgr2: sc$avgr2
     $overlap: sc$overlap

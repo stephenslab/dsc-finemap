@@ -65,8 +65,8 @@ dap_scores = function(sets, pip, true_coef) {
 }
 
 dap_scores_multiple = function(res, truth) {
-  total = valid = size = avgr2 = top = overlap = 0
-  signal_pip = list()
+  total = valid = top = overlap = vector()
+  signal_pip = size = avgr2 = list()
   pip = list()
   for (r in 1:length(res)) {
     set = res[[r]]$set
@@ -74,12 +74,12 @@ dap_scores_multiple = function(res, truth) {
     snps = snps[order(as.numeric(snps$snp)),]
     set = set[which(set$cluster_prob > 0.95),]
     out = dap_scores(set, snps$snp_prob, truth[,r])
-    total = total + out$total
-    valid = valid + out$valid
-    size = size + out$size
-    avgr2 = avgr2 + out$avgr2
-    top = top + out$top
-    overlap = overlap + out$has_overlap
+    total[r] = out$total
+    valid[r] = out$valid
+    size[[r]] = out$size
+    avgr2[[r]] = out$avgr2
+    top[r] = out$top
+    overlap[r] = out$has_overlap
     signal_pip[[r]] = out$signal_pip
     pip[[r]] = snps$snp_prob
   }

@@ -29,7 +29,7 @@ susie_scores = function(sets, pip, true_coef) {
   if (is.null(dim(true_coef))) beta_idx = which(true_coef!=0)
   else beta_idx = which(apply(true_coef, 1, sum) != 0)
   if(is.null(sets)){
-    return(list(total=NA, valid=NA, size=NA, purity=NA, top=NA, has_overlap=NA,
+    return(list(total=NA, valid=NA, size=NA, purity=NA, avgr2=NA, top=NA, has_overlap=NA,
               signal_pip = NA))
   }
   cs = sets$cs
@@ -37,9 +37,11 @@ susie_scores = function(sets, pip, true_coef) {
     size = 0
     total = 0
     purity = 0
+    avgr2 = 0
   } else {
     size = sapply(cs,length)
     purity = as.vector(sets$purity[,1])
+    avgr2 = as.vector(sets$purity[,2])
     total = length(cs)
   }
   valid = 0
@@ -52,24 +54,19 @@ susie_scores = function(sets, pip, true_coef) {
       if (set.idx[highest.idx]%in%beta_idx) top_hit=top_hit+1
     }
   }
-  return(list(total=total, valid=valid, size=size, purity=purity, top=top_hit, has_overlap=check_overlap(cs),
+  return(list(total=total, valid=valid, size=size, purity=purity, avgr2=avgr2, top=top_hit, has_overlap=check_overlap(cs),
               signal_pip = pip[beta_idx]))
 }
 
 susie_scores_multiple = function(res, truth) {
-  total = valid = size = purity = top = overlap = 0
-  signal_pip = list()
-  pip = list()
-  objective = vector()
-  converged = vector()
+  total = valid = top = overlap = objective = converged = vector()
+  signal_pip = pip = size = purity = avgr2 = list()
   for (r in 1:length(res)) {
     out = susie_scores(res[[r]]$sets, res[[r]]$pip, truth[,r])
-    total = total + out$total
-    valid = valid + out$valid
-    size = size + out$size
-    purity = purity + out$purity
-    top = top + out$top
-    overlap = overlap + out$has_overlap
+    total[r] = out$total
+    valid[r] = out$valid
+    top[r] = out$top
+    overlap[r] = out$has_overlap
     if(is.null(susieR::susie_get_objective(res[[r]]))){
       objective[r] = NA
       converged[r] = NA
@@ -79,7 +76,10 @@ susie_scores_multiple = function(res, truth) {
     }
     signal_pip[[r]] = out$signal_pip
     pip[[r]] = res[[r]]$pip
+    size[[r]] = out$size
+    purity[[r]] = out$purity
+    avgr2[[r]] = out$avgr2
   }
-  return(list(total=total, valid=valid, size=size, purity=purity, top=top, objective=objective, converged=sum(converged),
+  return(list(total=total, valid=valid, size=size, purity=purity, avgr2=avgr2, top=top, objective=objective, converged=converged,
               overlap=overlap, signal_pip = do.call(cbind, signal_pip), pip = do.call(cbind, pip)))
 }

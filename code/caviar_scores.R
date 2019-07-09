@@ -23,18 +23,18 @@ caviar_scores = function(cs, pip, true_coef) {
 }
 
 caviar_scores_multiple = function(res, truth) {
-  total = valid = size = 0
+  total = valid = size = vector()
   signal_pip = list()
   pip = list()
-  for (r in 1:length(res)) {
+  R = length(res)
+  for (r in 1:R) {
     set = res[[r]]$set
     snps = res[[r]]$snp
     snps = snps[order(as.numeric(snps$snp)),]
-    
     out = caviar_scores(set, snps$snp_prob, truth[,r])
-    total = total + out$total
-    valid = valid + out$valid
-    size = size + out$size
+    total[r] = out$total
+    valid[r] = out$valid
+    size[r] = out$size
     signal_pip[[r]] = out$signal_pip
     pip[[r]] = snps$snp_prob
   }

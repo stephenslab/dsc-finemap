@@ -77,7 +77,7 @@ finemap_v1.3_scores = function(cs, pip, true_coef) {
 }
 
 finemap_v1.3_scores_multiple = function(res, truth) {
-  total = valid = size = 0
+  total = valid = size = vector() 
   signal_pip = list()
   pip = list()
   for (r in 1:length(res)) {
@@ -92,9 +92,9 @@ finemap_v1.3_scores_multiple = function(res, truth) {
       out = finemap_v1.3_scores(set, snps$snp_prob, truth[,r])
       pip[[r]] = snps$snp_prob
     }
-    total = total + out$total
-    valid = valid + out$valid
-    size = size + out$size
+    total[r] = out$total
+    valid[r] = out$valid
+    size[r] = out$size
     signal_pip[[r]] = out$signal_pip
   }
   return(list(total=total, valid=valid, size=size, signal_pip = do.call(cbind,signal_pip), pip = do.call(cbind,pip)))
