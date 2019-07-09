@@ -41,7 +41,7 @@ susie_scores = function(sets, pip, true_coef) {
   } else {
     size = sapply(cs,length)
     purity = as.vector(sets$purity[,1])
-    avgr2 = as.vector(sets$purity[,2])
+    avgr2 = as.vector(sets$purity[,2])^2
     total = length(cs)
   }
   valid = 0
