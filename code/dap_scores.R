@@ -64,7 +64,7 @@ dap_scores = function(sets, pip, true_coef) {
               has_overlap=check_overlap(cs), signal_pip = pip[beta_idx]))
 }
 
-dap_scores_multiple = function(res, truth) {
+dap_scores_multiple = function(res, truth, avgr2_threshold = 0.95) {
   total = valid = top = overlap = vector()
   signal_pip = size = avgr2 = list()
   pip = list()
@@ -72,7 +72,7 @@ dap_scores_multiple = function(res, truth) {
     set = res[[r]]$set
     snps = res[[r]]$snp
     snps = snps[order(as.numeric(snps$snp)),]
-    set = set[which(set$cluster_prob > 0.95),]
+    set = set[which(set$cluster_prob >= avgr2_threshold),]
     out = dap_scores(set, snps$snp_prob, truth[,r])
     total[r] = out$total
     valid[r] = out$valid
