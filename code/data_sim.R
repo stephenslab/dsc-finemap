@@ -23,8 +23,10 @@ X.sample = X.sample[, choose.index]
 if (!is.na(X.out)) X.out = X.out[, choose.index]
 # Apply MAF filter
 maf.sample = apply(X.sample, 2, function(x) sum(x)/(2*length(x)))
+maf.sample = pmin(maf.sample, 1-maf.sample)
 if (!is.na(X.out)) {
     maf.out = apply(X.out, 2, function(x) sum(x)/(2*length(x)))
+    maf.out = pmin(maf.out, 1-maf.out)
 } else {
     maf.out = NA
 }
