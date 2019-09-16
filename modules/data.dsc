@@ -13,7 +13,7 @@ full_data: sim_utils.R + data_sim.R
   subsample: ${prop_samples}
   ld_sample_file: file(sample.ld)
   ld_out_file: file(out.ld)
-  maf_thresh: 0
+  maf_thresh: 0.05
   remove_corr: FALSE
   $X_sample: X.sample
   $X_out: X.out

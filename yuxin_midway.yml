@@ -43,9 +43,9 @@ DSC:
 default:
   queue: midway2_head
   time_per_instance: 5m
-  instances_per_job: 50
+  instances_per_job: 20
   n_cpu: 1
-  mem_per_cpu: 3G
+  mem_per_cpu: 2G
 
 full_data:
   time_per_instance: 10m
@@ -60,24 +60,30 @@ susie_rss_add_z:
   instances_per_job: 5
 
 susie_bhat:
-  time_per_instance: 31m
-  instances_per_job: 10
+  time_per_instance: 61m
+  instances_per_job: 5
 
 susie_bhat_add_z:
   time_per_instance: 61m
   instances_per_job: 5
 
 finemap:
-  time_per_instance: 20m
+  time_per_instance: 31m
   instances_per_job: 5
 
 finemap_add_z:
-  time_per_instance: 61m
+  time_per_instance: 31m
   instances_per_job: 5
 
 caviar:
-  time_per_instance: 61m
-  instances_per_job: 5
+  n_cpu: 2
+  time_per_instance: 5h
+  instances_per_job: 1
+
+caviar_add_z:
+  n_cpu: 2
+  time_per_instance: 5h
+  instances_per_job: 1
 
 dap_z:
   time_per_instance: 61m
