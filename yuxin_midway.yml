@@ -1,28 +1,28 @@
 DSC:
   midway2:
     description: UChicago RCC cluster Midway 2
-    address: yuxin@midway2.rcc.uchicago.edu
+    address: {user_name}@midway2.rcc.uchicago.edu
     paths:
       home: /home/{user_name}
     queue_type: pbs
-    status_check_interval: 60
-    max_running_jobs: 150
+    status_check_interval: 30
+    max_running_jobs: 50
     max_cores: 40
     max_walltime: "36:00:00"
     max_mem: 64G
     job_template: |
       #!/bin/bash
-      #SBATCH --time={walltime}
       #{partition}
       #{account}
-      #SBATCH --nodes=1
-      #SBATCH --ntasks-per-node={cores}
-      #SBATCH --mem-per-cpu={mem//10**9}G
+      #SBATCH --time={walltime}
+      #SBATCH --nodes={nodes}
+      #SBATCH --cpus-per-task={cores}
+      #SBATCH --mem={mem//10**9}G
       #SBATCH --job-name={job_name}
-      #SBATCH --output={job_name}.out
-      #SBATCH --error={job_name}.err
+      #SBATCH --output={cur_dir}/{job_name}.out
+      #SBATCH --error={cur_dir}/{job_name}.err
       cd {cur_dir}
-      module load R/3.5.1
+      module load R/3.5.1 2> /dev/null
     partition: "SBATCH --partition=broadwl"
     account: ""
     submit_cmd: sbatch {job_file}
@@ -43,35 +43,32 @@ DSC:
 default:
   queue: midway2_head
   time_per_instance: 2m
-  instances_per_job: 20
-  n_cpu: 1
-  mem_per_cpu: 3G
+  # it means each CPU will run 120 / (4 * 10) = 3 sequential jobs
+  instances_per_job: 120
+  nodes_per_job: 10
+  cpus_per_node: 4
+  cpus_per_instance: 1
+  mem_per_instance: 2G
+  time_per_instance: 3m
 
 susie_rss:
   time_per_instance: 61m
-  instances_per_job: 5
 
 susie_rss_add_z:
   time_per_instance: 61m
-  instances_per_job: 5
 
 susie_bhat:
   time_per_instance: 61m
-  instances_per_job: 5
 
 susie_bhat_add_z:
   time_per_instance: 61m
-  instances_per_job: 5
 
 finemap:
   time_per_instance: 61m
-  instances_per_job: 5
 
 finemap_add_z:
   time_per_instance: 61m
-  instances_per_job: 5
 
 dap_z:
   time_per_instance: 61m
-  instances_per_job: 5
-  mem_per_cpu: 6G
+  mem_per_instance: 6G
