@@ -1,7 +1,7 @@
 DSC:
   midway2:
     description: UChicago RCC cluster Midway 2
-    address: {user_name}@midway2.rcc.uchicago.edu
+    address: yuxin@midway2.rcc.uchicago.edu
     paths:
       home: /home/{user_name}
     queue_type: pbs
@@ -42,8 +42,8 @@ DSC:
 
 default:
   queue: midway2_head
-  # it means each CPU will run 120 / (4 * 10) = 3 sequential jobs
-  instances_per_job: 120
+  # it means each CPU will run 200 / (4 * 10) = 5 sequential jobs
+  instances_per_job: 200
   nodes_per_job: 10
   cpus_per_node: 4
   cpus_per_instance: 1
@@ -55,15 +55,19 @@ full_data:
 
 susie_rss:
   time_per_instance: 61m
+  instances_per_job: 80
 
 susie_rss_add_z:
   time_per_instance: 61m
+  instances_per_job: 80
 
 susie_bhat:
   time_per_instance: 61m
+  instances_per_job: 80
 
 susie_bhat_add_z:
   time_per_instance: 61m
+  instances_per_job: 80
 
 finemap:
   time_per_instance: 31m
@@ -85,6 +89,7 @@ caviar_add_z:
 dap_z:
   time_per_instance: 61m
   mem_per_instance: 6G
+  instances_per_job: 80
 
 score_susie:
   time_per_instance: 2m
