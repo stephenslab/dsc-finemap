@@ -16,11 +16,11 @@ susie_bhat_multiple = function(Bhat,Shat,R, n, L, s_init, estimate_residual_vari
   if (is.null(dim(Shat))) Shat = matrix(ncol=1, Shat)
   for (r in 1:ncol(Bhat)) {
     if (is.na(s_init))
-      fitted[[r]] = susie_bhat_analyze(Bhat[,r],Shat[,r], R, n[r],
+      fitted[[r]] = susie_bhat_analyze(Bhat[,r],Shat[,r], R, n,
                                        L=L, list(),
                                        estimate_residual_variance)
     else
-      fitted[[r]] = susie_bhat_analyze(Bhat[,r],Shat[,r], R, n[r],
+      fitted[[r]] = susie_bhat_analyze(Bhat[,r],Shat[,r], R, n,
                                        L=L, s_init[[r]],
                                        estimate_residual_variance)
     if(is.null(fitted[[r]]$sets))

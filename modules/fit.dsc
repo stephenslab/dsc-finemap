@@ -116,10 +116,10 @@ susie_rss: fit_susie_rss.R
   @CONF: R_libs = (susieR, data.table)
   sumstats: $sumstats
   s_init: NA
-  L: 10
+  L: 1,2,3,5
   ld: $ld
   ld_method: "in_sample", "out_sample"
-  lamb: 0, 1e-04, 0.1, 1
+  lamb: 0, 0.1, 1
   estimate_residual_variance: TRUE, FALSE
   add_z: FALSE
   N_out: $N_out
@@ -143,7 +143,7 @@ susie_bhat: fit_susie_bhat.R
   sumstats: $sumstats
   s_init: NA
   n: $N_sample
-  L: 10
+  L: 1,2,3,5
   ld: $ld
   ld_method: "in_sample", "out_sample"
   estimate_residual_variance: TRUE, FALSE

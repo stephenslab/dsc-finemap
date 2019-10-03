@@ -57,12 +57,13 @@ original_Y(base_sim):
 #----------------------------------------
 
 sim_gaussian: simulate.R + \
-                R(res=sim_gaussian_multiple(X, pve, n_signal, effect_weight))
+                R(res=sim_gaussian_multiple(X, pve, n_signal, effect_weight, n_traits))
   @CONF: R_libs = susieR
   X: $X_sample
-  pve: 0.1,0.2
-  n_signal: 1,2
+  pve: 0.2
+  n_signal: 1,2,3,4,5
   effect_weight: rep(1/n_signal, n_signal)
+  n_traits: 2
   $Y: res$Y
   $meta: res$meta
 
