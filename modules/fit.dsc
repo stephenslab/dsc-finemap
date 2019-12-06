@@ -119,7 +119,7 @@ susie_rss: fit_susie_rss.R
   L: 1,2,3,5
   ld: $ld
   ld_method: "in_sample", "out_sample"
-  lamb: 0, 0.1, 1
+  lamb: 0, 1e-4, 0.1, 1
   estimate_residual_variance: TRUE, FALSE
   add_z: FALSE
   N_out: $N_out

@@ -1,16 +1,13 @@
 DSC:
   midway2:
     description: UChicago RCC cluster Midway 2
-    address: yuxin@midway2.rcc.uchicago.edu
-    paths:
-      home: /home/{user_name}
     queue_type: pbs
     status_check_interval: 30
     max_running_jobs: 50
     max_cores: 40
     max_walltime: "36:00:00"
     max_mem: 64G
-    job_template: |
+    task_template: |
       #!/bin/bash
       #{partition}
       #{account}
@@ -29,11 +26,8 @@ DSC:
     submit_cmd_output: "Submitted batch job {job_id}"
     status_cmd: squeue --job {job_id}
     kill_cmd: scancel {job_id}
-  midway2_head:
-    based_on: midway2
-    address: localhost
   stephenslab:
-    based_on: midway2_head
+    based_on: midway2
     max_cores: 28
     max_mem: 128G
     max_walltime: "10d"
@@ -41,11 +35,10 @@ DSC:
     account: "SBATCH --account=pi-mstephens"
 
 default:
-  queue: midway2_head
-  # it means each CPU will run 200 / (4 * 10) = 5 sequential jobs
+  queue: midway2
   instances_per_job: 200
-  nodes_per_job: 10
-  cpus_per_node: 4
+  nodes_per_job: 1
+  instances_per_node: 10
   cpus_per_instance: 1
   mem_per_instance: 2G
   time_per_instance: 5m
@@ -77,14 +70,13 @@ finemap_add_z:
 
 caviar:
   cpus_per_instance: 2
-  time_per_instance: 5h
-  instances_per_job: 40
+  time_per_instance: 6h
+  instances_per_job: 10
 
 caviar_add_z:
   cpus_per_instance: 2
-  time_per_instance: 5h
-  instances_per_job: 40
-
+  time_per_instance: 6h
+  instances_per_job: 10
 
 dap_z:
   time_per_instance: 61m
